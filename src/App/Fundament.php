@@ -22,6 +22,9 @@ class Fundament
 
     public function run()
     {
+        $this->router->addPattern(':k', '#[abcd]+#');
+
+        $this->router->get('/strange/{value:k}', 'Ops');
         $this->router->get('/users/{id:i}', 'AlohaBaby');
         $this->router->route();
     }

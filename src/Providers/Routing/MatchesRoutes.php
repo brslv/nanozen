@@ -10,7 +10,19 @@ namespace Nanozen\Providers\Routing;
  */
 trait MatchesRoutes
 {
+
+    protected $matchedRoutes = [];
+
+    protected $extractedVariables = [];
+
+    protected $allowedRequestMethods = ['get', 'post', 'patch', 'put', 'delete'];
+
     public function match()
+    {
+        return $this->performRouteMatching();
+    }
+
+    private function performRouteMatching()
     {
         $url =
             ! isset($_GET['url']) || trim($_GET['url']) == ""
@@ -24,12 +36,11 @@ trait MatchesRoutes
 
         $requestMethod = strtolower($_SERVER['REQUEST_METHOD']);
 
-        $matchedRoutes = [];
+        if ( ! in_array($requestMethod, $this->allowedRequestMethods)) {
+            throw new \Exception("HTTP method {$requestMethod} not allowed.");
+        }
 
-        $extractedVariables = [];
-
-        foreach ($this->routes[$requestMethod] as $route => $target)
-        {
+        foreach ($this->routes[$requestMethod] as $route => $target) {
             $routeSegments = $route == '/'
                 ? ['/']
                 : preg_split('#/#', $route, null, PREG_SPLIT_NO_EMPTY);
@@ -38,18 +49,15 @@ trait MatchesRoutes
 
             $routeMatches = true;
 
-            if ($urlSegmentsCount > $routeSegmentsCount)
-            {
+            if ($urlSegmentsCount > $routeSegmentsCount) {
                 continue;
             }
 
-            for ($i = 0; $i < $routeSegmentsCount; $i++)
-            {
+            for ($i = 0; $i < $routeSegmentsCount; $i++) {
                 $currentRouteSegment = $routeSegments[$i];
                 $currentUrlSegment = isset($urlSegments[$i]) ? $urlSegments[$i] : null;
 
-                if ($this->isRouteSegmentParameter($currentRouteSegment))
-                {
+                if ($this->isRouteSegmentParameter($currentRouteSegment)) {
                     if ($currentUrlSegment == null &&
                         ! $this->isRouteSegmentOptional($currentRouteSegment))
                     {
@@ -58,7 +66,7 @@ trait MatchesRoutes
                     }
 
                     // match regexes
-                    preg_match('#(?:{)(.*?)(:[i|s|a])*?(?:}|\?)#', $currentRouteSegment, $routeSegmentPartials);
+                    preg_match('#(?:{)(.*?)(:[a-z])*?(?:}|\?)#', $currentRouteSegment, $routeSegmentPartials);
 
                     $routeSegmentName = isset($routeSegmentPartials[1])
                         ? $routeSegmentPartials[1]
@@ -67,28 +75,28 @@ trait MatchesRoutes
                         ? $routeSegmentPartials[2]
                         : null;
 
-                    if ( ! array_key_exists($routeSegmentType, $this->pattens))
-                    {
+                    if ( ! array_key_exists($routeSegmentType, $this->patterns)) {
                         throw new \Exception("Invalid segment type in route: {$route}");
                     }
 
-                    $routeSegmentRegex = $this->pattens[$routeSegmentType];
+                    $routeSegmentRegex = $this->patterns[$routeSegmentType];
                     preg_match($routeSegmentRegex, $currentUrlSegment, $urlSegmentMatchesRegex);
 
-                    if (empty($urlSegmentMatchesRegex))
-                    {
+                    if (empty($urlSegmentMatchesRegex)) {
                         $routeMatches = false;
                         break;
+                    } else {
+                        if ($urlSegmentMatchesRegex[0] != $currentUrlSegment) {
+                            $routeMatches = false;
+                            break;
+                        }
                     }
 
                     // everything's fine
                     // put the url value in the extracted values
-                    $extractedVariables[$routeSegmentName] = $urlSegmentMatchesRegex[0];
-                }
-                else
-                {
-                    if ( 0 != strcasecmp($currentRouteSegment, $currentUrlSegment))
-                    {
+                    $this->extractedVariables[$routeSegmentName] = $urlSegmentMatchesRegex[0];
+                } else {
+                    if ( 0 != strcasecmp($currentRouteSegment, $currentUrlSegment)) {
                         $routeMatches = false;
                         break;
                     }
@@ -100,22 +108,19 @@ trait MatchesRoutes
 
                 $isLastRouteSegment = $i == $routeSegmentsCount - 1 - $optionalSegments;
 
-                if ($urlSegmentsCount == $routeSegmentsCount)
-                {
+                if ($urlSegmentsCount == $routeSegmentsCount) {
                     $isLastRouteSegment = $i == $routeSegmentsCount - 1;
                 }
 
-                if ($isLastRouteSegment && $routeMatches)
-                {
-                    $matchedRoutes[] = $route;
+                if ($isLastRouteSegment && $routeMatches) {
+                    $this->matchedRoutes[] = $route;
                 }
             }
         }
 
-        if ( ! empty($matchedRoutes))
-        {
+        if ( ! empty($this->matchedRoutes)) {
             // The first matched route.
-            return $matchedRoutes[0];
+            return $this->matchedRoutes[0];
         }
 
         return false;
@@ -135,10 +140,8 @@ trait MatchesRoutes
     {
         $countOfOptionalRouteSegments = 0;
 
-        foreach ($routeSegments as $segment)
-        {
-            if ($this->isRouteSegmentOptional($segment))
-            {
+        foreach ($routeSegments as $segment) {
+            if ($this->isRouteSegmentOptional($segment)) {
                 $countOfOptionalRouteSegments++;
             }
         }

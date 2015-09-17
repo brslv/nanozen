@@ -24,17 +24,24 @@ class RoutingProvider implements RoutingProviderContract
         'delete' => [],
     ];
 
-    protected $pattens = [
+    protected $patterns = [
         ':i' => '#[0-9]+#',         // represents integers
         ':s' => '#[a-zA-Z]+#',      // represents strings
         ':a' => '#.+#',             // represents everything
     ];
 
-    protected $allowedRequestMethods = ['get', 'post', 'patch', 'put', 'delete'];
-
-    function route()
+    public function addPattern($alias, $pattern)
     {
-        $matchedRoute = $this->match();
+        $this->patterns[$alias] = $pattern;
+
+        return $this->patterns;
+    }
+
+    public function route()
+    {
+        if ($this->match()) {
+            // call dispatcher.
+        }
     }
 
 }
