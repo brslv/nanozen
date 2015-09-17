@@ -1,8 +1,12 @@
 <?php
 
-use Nanozen\App\Fundament as Nanozen;
-
 require_once 'autoload.php';
 
+use Nanozen\App\Fundament as Nanozen;
 
-(new Nanozen());
+/**
+ * Run the app, buddy.
+ *
+ * @author brslv
+ */
+(new Nanozen())->run();

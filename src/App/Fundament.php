@@ -12,6 +12,6 @@ class Fundament
 {
     public function __construct()
     {
-        echo "Hi, Nano!";
+        echo "Hi, Nano, It's me again!";
     }
 }
