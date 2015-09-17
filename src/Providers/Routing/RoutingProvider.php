@@ -2,6 +2,7 @@
 
 namespace Nanozen\Providers\Routing;
 
+use Nanozen\Contracts\Providers\Routing\DispatchingProviderContract;
 use Nanozen\Contracts\Providers\Routing\RoutingProviderContract;
 
 /**
@@ -15,6 +16,8 @@ class RoutingProvider implements RoutingProviderContract
 
     use AddsRoutes;
     use MatchesRoutes;
+
+    protected $dispatcher;
 
     protected $routes = [
         'get' => [],
@@ -30,6 +33,11 @@ class RoutingProvider implements RoutingProviderContract
         ':a' => '#.+#',             // represents everything
     ];
 
+    public function __construct(DispatchingProviderContract $dispatcher)
+    {
+        $this->dispatcher = $dispatcher;
+    }
+
     public function addPattern($alias, $pattern)
     {
         $this->patterns[$alias] = $pattern;
@@ -37,11 +45,15 @@ class RoutingProvider implements RoutingProviderContract
         return $this->patterns;
     }
 
-    public function route()
+    public function invoke()
     {
-        if ($this->match()) {
-            // call dispatcher.
-        }
+        $target = $this->match();
+
+        // Call the target controller/action
+        // or perform the target closure.
+        //
+        // Provide target destination & extracted url variables.
+        $this->dispatcher->dispatch($target, $this->extractedVariables);
     }
 
 }

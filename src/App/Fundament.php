@@ -2,6 +2,7 @@
 
 namespace Nanozen\App;
 
+use Nanozen\Providers\Routing\DispatchingProvider;
 use Nanozen\Providers\Routing\RoutingProvider;
 
 /**
@@ -15,18 +16,23 @@ class Fundament
 
     protected $router;
 
+    protected $dispatcher;
+
     public function __construct()
     {
-        $this->router = new RoutingProvider();
+        $this->dispatcher = new DispatchingProvider();
+        $this->router = new RoutingProvider($this->dispatcher);
     }
 
     public function run()
     {
-        $this->router->addPattern(':k', '#[abcd]+#');
+        // Setting routes.
+        $this->router->get('/', 'HomeController@welcome');
+        $this->router->get('aloha/{name:s}', 'HomeController@aloha');
+        $this->router->get('bye', 'HomeController@bye');
 
-        $this->router->get('/strange/{value:k}', 'Ops');
-        $this->router->get('/users/{id:i}', 'AlohaBaby');
-        $this->router->route();
+        // Invoking the router.
+        $this->router->invoke();
     }
 
 }

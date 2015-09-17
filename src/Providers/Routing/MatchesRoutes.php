@@ -19,10 +19,10 @@ trait MatchesRoutes
 
     public function match()
     {
-        return $this->performRouteMatching();
+        return $this->performRouteMatchingAlgorithm();
     }
 
-    private function performRouteMatching()
+    private function performRouteMatchingAlgorithm()
     {
         $url =
             ! isset($_GET['url']) || trim($_GET['url']) == ""
@@ -119,8 +119,10 @@ trait MatchesRoutes
         }
 
         if ( ! empty($this->matchedRoutes)) {
-            // The first matched route.
-            return $this->matchedRoutes[0];
+            // The target of the first matched route.
+
+            $target = $this->routes[$requestMethod][$this->matchedRoutes[0]];
+            return $target;
         }
 
         return false;
@@ -148,4 +150,5 @@ trait MatchesRoutes
 
         return $countOfOptionalRouteSegments;
     }
+
 }

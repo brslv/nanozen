@@ -21,7 +21,7 @@ interface RoutingProviderContract
 
     function delete($route, $target);
 
-    function route();
+    function invoke();
 
     function match();
 
