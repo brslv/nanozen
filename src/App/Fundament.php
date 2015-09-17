@@ -2,6 +2,8 @@
 
 namespace Nanozen\App;
 
+use Nanozen\Providers\Routing\RoutingProvider;
+
 /**
  * Class Fundament
  *
@@ -10,8 +12,18 @@ namespace Nanozen\App;
  */
 class Fundament
 {
+
+    protected $router;
+
     public function __construct()
     {
-        echo "Hi, Nano, It's me again!";
+        $this->router = new RoutingProvider();
     }
+
+    public function run()
+    {
+        $this->router->get('/users/{id:i}', 'AlohaBaby');
+        $this->router->route();
+    }
+
 }
