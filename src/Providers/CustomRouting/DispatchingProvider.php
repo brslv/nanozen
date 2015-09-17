@@ -1,14 +1,14 @@
 <?php
 
-namespace Nanozen\Providers\Routing;
+namespace Nanozen\Providers\CustomRouting;
 
-use Nanozen\Contracts\Providers\Routing\DispatchingProviderContract;
+use Nanozen\Contracts\Providers\CustomRouting\DispatchingProviderContract;
 
 /**
  * Class DispatchProvider
  *
  * @author brslv
- * @package Nanozen\Providers\Routing
+ * @package Nanozen\Providers\CustomRouting
  */
 class DispatchingProvider implements DispatchingProviderContract
 {

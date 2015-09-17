@@ -1,12 +1,12 @@
 <?php
 
-namespace Nanozen\Providers\Routing;
+namespace Nanozen\Providers\CustomRouting;
 
 /**
  * Trait AddsRoutes
  *
  * @author brslv
- * @package Nanozen\Providers\Routing
+ * @package Nanozen\Providers\CustomRouting
  */
 trait AddsRoutes
 {

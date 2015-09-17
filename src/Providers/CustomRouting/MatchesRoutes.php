@@ -1,12 +1,12 @@
 <?php
 
-namespace Nanozen\Providers\Routing;
+namespace Nanozen\Providers\CustomRouting;
 
 /**
  * Class MatchesRoutes
  *
  * @author brslv
- * @package Nanozen\Providers\Routing
+ * @package Nanozen\Providers\CustomRouting
  */
 trait MatchesRoutes
 {

@@ -1,14 +1,14 @@
 <?php
 
-namespace Nanozen\Contracts\Providers\Routing;
+namespace Nanozen\Contracts\Providers\CustomRouting;
 
 /**
  * Interface RoutingProviderContract
  *
  * @author brslv
- * @package Nanozen\Contracts\Providers\Routing
+ * @package Nanozen\Contracts\Providers\CustomRouting
  */
-interface RoutingProviderContract
+interface CustomRoutingProviderContract
 {
 
     function get($route, $target);

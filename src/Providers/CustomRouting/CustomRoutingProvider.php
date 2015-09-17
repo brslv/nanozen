@@ -1,17 +1,17 @@
 <?php
 
-namespace Nanozen\Providers\Routing;
+namespace Nanozen\Providers\CustomRouting;
 
-use Nanozen\Contracts\Providers\Routing\DispatchingProviderContract;
-use Nanozen\Contracts\Providers\Routing\RoutingProviderContract;
+use Nanozen\Contracts\Providers\CustomRouting\DispatchingProviderContract;
+use Nanozen\Contracts\Providers\CustomRouting\CustomRoutingProviderContract;
 
 /**
- * Class RoutingProvider
+ * Class CustomRoutingProvider
  *
  * @author brslv
- * @package Nanozen\Providers\Routing
+ * @package Nanozen\Providers\CustomRouting
  */
-class RoutingProvider implements RoutingProviderContract
+class CustomRoutingProvider implements CustomRoutingProviderContract
 {
 
     use AddsRoutes;
