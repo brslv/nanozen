@@ -19,7 +19,7 @@ class CustomRoutingProvider implements CustomRoutingProviderContract
 
     protected $dispatcher;
 
-    protected $routes = [
+    public $routes = [
         'get' => [],
         'post' => [],
         'patch' => [],

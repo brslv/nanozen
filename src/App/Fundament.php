@@ -14,25 +14,46 @@ use Nanozen\Providers\CustomRouting\CustomRoutingProvider;
 class Fundament
 {
 
-    protected $router;
-
-    protected $dispatcher;
+    protected $container;
 
     public function __construct()
     {
-        $this->dispatcher = new DispatchingProvider();
-        $this->router = new CustomRoutingProvider($this->dispatcher);
+        $this->setupContainer()
+             ->populateContainer()
+             ->run();
+    }
+
+    protected function setupContainer()
+    {
+        $this->container = new Container();
+
+        return $this;
+    }
+
+    public function populateContainer()
+    {
+        $container = $this->container;
+
+        $this->container->register('dispatcher', function () {
+            return new DispatchingProvider();
+        });
+
+        $this->container->share('router', function () use ($container) {
+            return new CustomRoutingProvider($container->resolve('dispatcher'));
+        });
+
+        return $this;
     }
 
     public function run()
     {
         // Setting routes.
-        $this->router->get('/', 'HomeController@welcome');
-        $this->router->get('aloha/{name:a}', 'HomeController@aloha');
-        $this->router->get('bye', 'HomeController@bye');
+        $this->container->resolve('router')->get('/', 'HomeController@welcome');
+        $this->container->resolve('router')->get('aloha/{name:a}', 'HomeController@aloha');
+        $this->container->resolve('router')->get('bye', 'HomeController@bye');
 
         // Invoking the router.
-        $this->router->invoke();
+        $this->container->resolve('router')->invoke();
     }
 
 }

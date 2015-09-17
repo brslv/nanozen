@@ -13,4 +13,4 @@ use Nanozen\App\Fundament as Nanozen;
  *
  * @author brslv
  */
-(new Nanozen())->run();
+new Nanozen;
