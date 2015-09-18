@@ -38,7 +38,7 @@ class Container
             return $instance;
         }
 
-        throw new Exception('{$name} does not found in the registry.');
+        throw new \Exception("{$name} does not found in the registry.");
     }
 
 }

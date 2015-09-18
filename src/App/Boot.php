@@ -12,14 +12,18 @@ class Boot
 {
 
     use SetsUpContainer;
+    use SetsUpBase;
 
     protected $container;
 
+    protected $base;
+
     public function __construct()
     {
-        $this->setupContainer()
-             ->populateContainer()
-             ->run();
+        $this->setupContainer();
+        $this->setupBase();
+        $this->populateContainer();
+        $this->run();
     }
 
     public function run()

@@ -2,13 +2,15 @@
 
 namespace Nanozen\Controllers;
 
+use Nanozen\Providers\Controller\BaseControllerProvider as BaseController;
+
 /**
  * Class HomeController
  *
  * @author brslv
  * @package Nanozen\Controllers
  */
-class HomeController
+class HomeController extends BaseController
 {
 
     /**

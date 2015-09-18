@@ -2,6 +2,7 @@
 
 namespace Nanozen\Providers\CustomRouting;
 
+use Nanozen\App\Base;
 use Nanozen\Contracts\Providers\CustomRouting\DispatchingProviderContract;
 use Nanozen\Contracts\Providers\CustomRouting\CustomRoutingProviderContract;
 
@@ -19,6 +20,8 @@ class CustomRoutingProvider implements CustomRoutingProviderContract
 
     protected $dispatcher;
 
+    protected $base;
+
     public $routes = [
         'get' => [],
         'post' => [],
@@ -33,9 +36,10 @@ class CustomRoutingProvider implements CustomRoutingProviderContract
         ':a' => '#.+#',             // represents everything
     ];
 
-    public function __construct(DispatchingProviderContract $dispatcher)
+    public function __construct(DispatchingProviderContract $dispatcher, Base $base)
     {
         $this->dispatcher = $dispatcher;
+        $this->base = $base;
     }
 
     public function addPattern($alias, $pattern)
@@ -53,7 +57,7 @@ class CustomRoutingProvider implements CustomRoutingProviderContract
         // or perform the target closure.
         //
         // Provide target destination & extracted url variables.
-        $this->dispatcher->dispatch($target, $this->extractedVariables);
+        $this->dispatcher->dispatch($target, $this->extractedVariables, $this->base);
     }
 
 }

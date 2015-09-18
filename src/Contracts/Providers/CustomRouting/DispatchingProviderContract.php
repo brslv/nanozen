@@ -1,6 +1,7 @@
 <?php
 
 namespace Nanozen\Contracts\Providers\CustomRouting;
+use Nanozen\App\Base;
 
 /**
  * Interface DispatchingProviderContract
@@ -11,6 +12,6 @@ namespace Nanozen\Contracts\Providers\CustomRouting;
 interface DispatchingProviderContract
 {
 
-    function dispatch($target, $variables);
+    function dispatch($target, $variables, Base $base);
 
 }

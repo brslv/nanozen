@@ -2,6 +2,7 @@
 
 namespace Nanozen\Providers\CustomRouting;
 
+use Nanozen\App\Base;
 use Nanozen\Contracts\Providers\CustomRouting\DispatchingProviderContract;
 
 /**
@@ -13,7 +14,7 @@ use Nanozen\Contracts\Providers\CustomRouting\DispatchingProviderContract;
 class DispatchingProvider implements DispatchingProviderContract
 {
 
-    public function dispatch($target, $variables)
+    public function dispatch($target, $variables, Base $base)
     {
         if ( ! $target) {
             $this->throw404();
@@ -42,7 +43,7 @@ class DispatchingProvider implements DispatchingProviderContract
             }
 
             if ($this->actionExists($_controller, $action)) {
-                call_user_func_array([new $_controller, $action], $variables);
+                call_user_func_array([new $_controller($base), $action], $variables);
             }
         }
     }
