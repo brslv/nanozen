@@ -21,6 +21,8 @@ class HomeController extends BaseController
     {
         $name = 'Stranger';
 
+        echo $this->base->container->resolve('me'), '<br />';
+
         $this->aloha($name);
     }
 
