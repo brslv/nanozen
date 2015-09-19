@@ -22,7 +22,7 @@ class DispatchingProvider implements DispatchingProviderContract
 
         if (is_callable($target))
         {
-            call_user_func($target);
+            call_user_func($target, $base);
             exit();
         }
 

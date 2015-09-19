@@ -11,30 +11,30 @@ namespace Nanozen\App;
 class Container
 {
 
-    protected $registry = array();
+    protected static $registry = array();
 
-    protected $shared = array();
+    protected static $shared = array();
 
-    public function register($name, \Closure $resolve)
+    public static function register($name, \Closure $resolve)
     {
-        $this->registry[$name] = $resolve;
+        static::$registry[$name] = $resolve;
     }
 
     public function share($name, \Closure $resolve)
     {
-        $this->shared[$name] = $resolve();
+        static::$shared[$name] = $resolve();
     }
 
     public function resolve($name)
     {
-        if (array_key_exists($name, $this->registry))
+        if (array_key_exists($name, static::$registry))
         {
-            $name = $this->registry[$name];
+            $name = static::$registry[$name];
             return $name();
         }
-        if (array_key_exists($name, $this->shared))
+        if (array_key_exists($name, static::$shared))
         {
-            $instance = $this->shared[$name];
+            $instance = static::$shared[$name];
             return $instance;
         }
 
