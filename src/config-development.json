@@ -1,5 +1,5 @@
 {
-    "db": {
-        "host": "localhost"
+    "paths": {
+    	"routes_file": "../src/routes.php"
     }
 }
