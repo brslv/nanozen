@@ -18,7 +18,7 @@ class CustomRoutingProvider implements CustomRoutingProviderContract
     use AddsRoutes;
     use MatchesRoutes;
     
-    public $dependsOn = ['DispatchingProviderContract'];
+    public $dependsOn = ['dispatchingProviderContract'];
 
     public $routes = [
         'get' => [],
@@ -49,7 +49,7 @@ class CustomRoutingProvider implements CustomRoutingProviderContract
         // or perform the target closure.
         //
         // Provide target destination & extracted url variables.
-        $this->DispatchingProviderContract->dispatch($target, $this->extractedVariables);
+        $this->dispatchingProviderContract->dispatch($target, $this->extractedVariables);
     }
 
 }

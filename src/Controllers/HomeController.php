@@ -2,7 +2,6 @@
 
 namespace Nanozen\Controllers;
 
-use Nanozen\App\Injector;
 use Nanozen\Providers\Controller\BaseControllerProvider as BaseController;
 
 /**

@@ -16,6 +16,6 @@ class BaseModelProvider
      *
      * @var \Nanozen\Providers\Config\ConfigProvider
      */
-    public $dependsOn = ['ConfigProviderContract'];
+    public $dependsOn = ['configProviderContract'];
 
 }

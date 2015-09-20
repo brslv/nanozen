@@ -13,6 +13,6 @@ use Nanozen\App\Base;
 class BaseControllerProvider
 {
 
-    public $dependsOn = ['ConfigProviderContract'];
+    public $dependsOn = ['configProviderContract'];
 
 }

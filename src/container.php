@@ -10,17 +10,17 @@ use Nanozen\App\InjectorTypes;
 
 Injector::prepare(
 		InjectorTypes::TYPE_CLASS,
-		'ConfigProviderContract',
+		'configProviderContract',
 		'\Nanozen\Providers\Config\ConfigProvider');
 
 Injector::prepare(
 		InjectorTypes::TYPE_CLASS,
-		'DispatchingProviderContract',
+		'dispatchingProviderContract',
 		'\Nanozen\Providers\CustomRouting\DispatchingProvider');
 
 Injector::prepare(
 		InjectorTypes::TYPE_SINGLETON,
-		'CustomRoutingProviderContract',
+		'customRoutingProviderContract',
 		'\Nanozen\Providers\CustomRouting\CustomRoutingProvider',
 		[
 				'\Nanozen\Providers\CustomRouting\DispatchingProvider',

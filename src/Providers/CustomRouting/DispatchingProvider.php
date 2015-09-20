@@ -15,6 +15,8 @@ use Nanozen\Contracts\Providers\CustomRouting\DispatchingProviderContract;
 class DispatchingProvider implements DispatchingProviderContract
 {
 
+    public $dependsOn = ['configProviderContract'];
+
     public function dispatch($target, $variables)
     {
         if ( ! $target) {
@@ -28,12 +30,12 @@ class DispatchingProvider implements DispatchingProviderContract
         }
 
         list($controller, $action) = $this->extractControllerAndActionFromTarget($target);
+        $_controller = $this->configProviderContract->get('namespaces.controllers') . $controller;
 
-        if ($this->controllerExists($controller)) {
-            $_controller = 'Nanozen\\Controllers\\' . $controller;
+        if ($this->controllerExists($_controller)) {
             $variablesCount = count($variables);
             $actionRequiredParametersCount =
-                (new \ReflectionMethod('Nanozen\\Controllers\\' . $controller, $action))
+                (new \ReflectionMethod($_controller, $action))
                     ->getNumberOfRequiredParameters();
 
             if ($actionRequiredParametersCount > $variablesCount) {
@@ -71,17 +73,17 @@ class DispatchingProvider implements DispatchingProviderContract
      */
     private function controllerExists($controller)
     {
-        return class_exists('Nanozen\\Controllers\\' . $controller);
+        return class_exists($controller);
     }
 
     /**
-     * @param $_controller
+     * @param $controller
      * @param $action
      * @return bool
      */
-    private function actionExists($_controller, $action)
+    private function actionExists($controller, $action)
     {
-        return method_exists($_controller, $action);
+        return method_exists($controller, $action);
     }
 
 }

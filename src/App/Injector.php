@@ -71,26 +71,47 @@ class Injector
 			
 			foreach ($classesToBeInjected as $classAlias) {
 				if (array_key_exists($classAlias, self::$container)) {
-					switch(self::$container[$classAlias]['type']) {
-						case InjectorTypes::TYPE_VALUE :
-							$object->$classAlias = self::$container[$classAlias]['value'];
-							break;
-						case InjectorTypes::TYPE_CLASS :
-							$object->$classAlias = self::call(self::$container[$classAlias]['value'], self::$container[$classAlias]['arguments']);
-							break;
-						case InjectorTypes::TYPE_SINGLETON :
-							if(self::$map[$classAlias]['instance'] === null) {
-								$object->$classAlias = self::$container[$classAlias]['instance'] = self::call(self::$container[$classAlias]['value'], self::$container[$classAlias]['arguments']);
-							} else {
-								$object->$classAlias = self::$container[$classAlias]['instance'];
-							}
-							break;
-					}
-				}
+                    self::injectDependencies($classAlias, $object);
+                }
 			}
 		}
 		
 		return $object;
+    }
+
+    /**
+     * @param $classAlias
+     * @param $object
+     * @throws \Exception
+     */
+    private static function injectDependencies($classAlias, $object)
+    {
+        switch (self::$container[$classAlias]['type']) {
+
+            case InjectorTypes::TYPE_VALUE :
+                $object->$classAlias = self::$container[$classAlias]['value'];
+                break;
+
+            case InjectorTypes::TYPE_CLASS :
+                $object->$classAlias = self::call(
+                    self::$container[$classAlias]['value'],
+                    self::$container[$classAlias]['arguments']
+                );
+                break;
+
+            case InjectorTypes::TYPE_SINGLETON :
+                if (self::$container[$classAlias]['instance'] === null) {
+                    self::$container[$classAlias]['instance'] = self::call(
+                        self::$container[$classAlias]['value'],
+                        self::$container[$classAlias]['arguments']
+                    );
+
+                    $object->$classAlias = self::$container[$classAlias]['instance'];
+                } else {
+                    $object->$classAlias = self::$container[$classAlias]['instance'];
+                }
+                break;
+        }
     }
     
     /**
