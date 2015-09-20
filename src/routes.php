@@ -5,11 +5,8 @@
  * 
  */
 
-// Setting routes.
 $route->get('/', 'HomeController@welcome');
 
-// If you want to use the container inside the closure
-// pass $base to it.
 $route->get('/closure', function ($base) {
 	echo $base->container->resolve('me');
 });
