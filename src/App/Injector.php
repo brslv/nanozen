@@ -13,7 +13,7 @@ class Injector
 
     private static $container;
     
-    const INJECTOR_PROPERTY = 'inject';
+    const INJECTOR_PROPERTY = 'dependsOn';
     
     /**
      * Prepare objects for injecting.
@@ -64,8 +64,8 @@ class Injector
 		}
 		
 		if (property_exists($class, Injector::INJECTOR_PROPERTY)) {
-			$injectorProperty = Injector::INJECTOR_PROPERTY;
-			$classesToBeInjected = $object->inject;
+			$injectorProperty = self::INJECTOR_PROPERTY;
+			$classesToBeInjected = $object->$injectorProperty;
 			
 			foreach ($classesToBeInjected as $classAlias) {
 				if (array_key_exists($classAlias, self::$container)) {
