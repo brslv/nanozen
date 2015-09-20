@@ -1,5 +1,8 @@
 <?php 
 
+use Nanozen\App\Injector;
+use Nanozen\App\InjectorTypes;
+
 /**
  * Preparing some dependency injections.
  * 
