@@ -13,7 +13,7 @@ trait SetsUpRoutes
 {
 	
 	public function setupRoutes(CustomRoutingProviderContract $router)
-	{		
+	{
 		include Injector::call('\Nanozen\Providers\Config\ConfigProvider')->get('paths.routes_file');
 	}
 	

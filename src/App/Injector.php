@@ -37,12 +37,14 @@ class Injector
     		self::prepareSingleton($alias, $value, $arguments);
     	}
     }
-    
+
     /**
      * Invoke a class.
-     * 
+     *
      * @param string $class The full class name.
      * @param array $arguments Array of arguments, needed for instantiating the specified class.
+     * @return object
+     * @throws \Exception
      */
     public static function call($class, $arguments = null) 
     {
@@ -77,7 +79,7 @@ class Injector
 							$object->$classAlias = self::call(self::$container[$classAlias]['value'], self::$container[$classAlias]['arguments']);
 							break;
 						case InjectorTypes::TYPE_SINGLETON :
-							if(self::$map->$key->instance === null) {
+							if(self::$map[$classAlias]['instance'] === null) {
 								$object->$classAlias = self::$container[$classAlias]['instance'] = self::call(self::$container[$classAlias]['value'], self::$container[$classAlias]['arguments']);
 							} else {
 								$object->$classAlias = self::$container[$classAlias]['instance'];

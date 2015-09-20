@@ -3,6 +3,7 @@
 namespace Nanozen\Providers\CustomRouting;
 
 use Nanozen\App\Base;
+use Nanozen\App\Injector;
 use Nanozen\Contracts\Providers\CustomRouting\DispatchingProviderContract;
 
 /**
@@ -22,7 +23,7 @@ class DispatchingProvider implements DispatchingProviderContract
 
         if (is_callable($target))
         {
-            call_user_func($target, $base);
+            call_user_func($target);
             exit();
         }
 
@@ -42,7 +43,8 @@ class DispatchingProvider implements DispatchingProviderContract
                 throw new \Exception($message);
             }
             if ($this->actionExists($_controller, $action)) {
-                call_user_func_array([new $_controller(), $action], $variables);
+                $_controller = Injector::call($_controller);
+                call_user_func_array([$_controller, $action], $variables);
             }
         }
     }

@@ -3,6 +3,7 @@
 namespace Nanozen\Providers\Config;
 
 use Nanozen\Providers\Mode\ModeProvider as Mode;
+use Nanozen\Contracts\Providers\Config\ConfigProviderContract;
 
 /**
  * Class ConfigProvider
@@ -10,7 +11,7 @@ use Nanozen\Providers\Mode\ModeProvider as Mode;
  * @author brslv
  * @package Nanozen\Providers\Config
  */
-class ConfigProvider
+class ConfigProvider implements ConfigProviderContract
 {
 
     protected $config;

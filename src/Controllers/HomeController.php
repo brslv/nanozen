@@ -2,6 +2,7 @@
 
 namespace Nanozen\Controllers;
 
+use Nanozen\App\Injector;
 use Nanozen\Providers\Controller\BaseControllerProvider as BaseController;
 
 /**
@@ -14,7 +15,7 @@ class HomeController extends BaseController
 {
 
     /**
-     * Experimentin'
+     * Experimenting.
      *
      */
     public function welcome()
