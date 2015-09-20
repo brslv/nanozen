@@ -11,28 +11,25 @@ namespace Nanozen\App;
 class Boot
 {
 
-    use SetsUpContainer;
+    use SetsUpInjector;
     use SetsUpRoutes;
-    use SetsUpBase;
-
-    protected $container;
-
-    protected $base;
-
+    
     public function __construct()
     {
-        $this->setupContainer();
-        $this->setupBase();
-        $this->populateContainer();
+        $this->setupInjector();
         $this->run();
     }
 
     public function run()
-    {
-        $this->setupRoutes();
+    {	
+    	// Getting an instance of CustomRoutingProvider.
+    	$router = Injector::call('\Nanozen\Providers\CustomRouting\CustomRoutingProvider');
+    	
+    	// Setting up the routes.
+		$this->setupRoutes($router);
 
         // Invoking the router.
-        $this->container->resolve('router')->invoke();
+        $router->invoke();
     }
 
 }

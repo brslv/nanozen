@@ -2,6 +2,7 @@
 
 namespace Nanozen\App;
 
+use Nanozen\Contracts\Providers\CustomRouting\CustomRoutingProviderContract;
 /**
  * Trait SetsUpRoutes
  * 
@@ -11,11 +12,9 @@ namespace Nanozen\App;
 trait SetsUpRoutes 
 {
 	
-	public function setupRoutes()
-	{
-		$route = $this->container->resolve('router');
-		
-		include $this->container->resolve('config')->get('paths.routes_file');
+	public function setupRoutes(CustomRoutingProviderContract $router)
+	{		
+		include Injector::call('\Nanozen\Providers\Config\ConfigProvider')->get('paths.routes_file');
 	}
 	
 }

@@ -5,12 +5,10 @@
  * 
  */
 
-$route->get('/', 'HomeController@welcome');
+$router->get('/', 'HomeController@welcome');
 
-$route->get('/closure', function ($base) {
-	echo $base->container->resolve('me');
-});
+$router->get('aloha/{name:a}', 'HomeController@aloha');
 
-$route->get('aloha/{name:a}', 'HomeController@aloha');
+$router->get('bye', 'HomeController@bye');
 
-$route->get('bye', 'HomeController@bye');
+$router->get('nice', 'TestController@nice');

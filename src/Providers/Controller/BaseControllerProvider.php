@@ -12,12 +12,10 @@ use Nanozen\App\Base;
  */
 class BaseControllerProvider
 {
-
-    protected $base;
-
-    public function __construct(Base $base)
+	
+    public function __construct()
     {
-        $this->base = $base;
+    	
     }
 
 }

@@ -12,6 +12,6 @@ use Nanozen\App\Base;
 interface DispatchingProviderContract
 {
 
-    function dispatch($target, $variables, Base $base);
+    function dispatch($target, $variables);
 
 }

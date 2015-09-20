@@ -23,7 +23,7 @@ trait MatchesRoutes
     }
 
     private function performRouteMatchingAlgorithm()
-    {
+    {	
         $url =
             ! isset($_GET['url']) || trim($_GET['url']) == ""
                 ? $_GET['url'] = '/'

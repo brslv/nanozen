@@ -14,7 +14,7 @@ use Nanozen\Contracts\Providers\CustomRouting\DispatchingProviderContract;
 class DispatchingProvider implements DispatchingProviderContract
 {
 
-    public function dispatch($target, $variables, Base $base)
+    public function dispatch($target, $variables)
     {
         if ( ! $target) {
             $this->throw404();
@@ -41,9 +41,8 @@ class DispatchingProvider implements DispatchingProviderContract
 
                 throw new \Exception($message);
             }
-
             if ($this->actionExists($_controller, $action)) {
-                call_user_func_array([new $_controller($base), $action], $variables);
+                call_user_func_array([new $_controller(), $action], $variables);
             }
         }
     }

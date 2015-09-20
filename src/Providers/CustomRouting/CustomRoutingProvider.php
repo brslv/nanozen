@@ -17,10 +17,8 @@ class CustomRoutingProvider implements CustomRoutingProviderContract
 
     use AddsRoutes;
     use MatchesRoutes;
-
-    protected $dispatcher;
-
-    protected $base;
+    
+    public $inject = ['dispatchingProviderContract'];
 
     public $routes = [
         'get' => [],
@@ -35,12 +33,6 @@ class CustomRoutingProvider implements CustomRoutingProviderContract
         ':s' => '#[a-zA-Z]+#',      // represents strings
         ':a' => '#.+#',             // represents everything
     ];
-
-    public function __construct(DispatchingProviderContract $dispatcher, Base $base)
-    {
-        $this->dispatcher = $dispatcher;
-        $this->base = $base;
-    }
 
     public function addPattern($alias, $pattern)
     {
@@ -57,7 +49,7 @@ class CustomRoutingProvider implements CustomRoutingProviderContract
         // or perform the target closure.
         //
         // Provide target destination & extracted url variables.
-        $this->dispatcher->dispatch($target, $this->extractedVariables, $this->base);
+        $this->dispatchingProviderContract->dispatch($target, $this->extractedVariables);
     }
 
 }
