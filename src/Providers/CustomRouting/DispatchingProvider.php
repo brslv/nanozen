@@ -41,7 +41,8 @@ class DispatchingProvider implements DispatchingProviderContract
             $params = $target['params'];
 
             call_user_func_array([new $controller, $action], $params);
-            return;
+
+            exit;
         }
 
         list($controller, $action) = $this->extractControllerAndActionFromTarget($target);
@@ -63,7 +64,7 @@ class DispatchingProvider implements DispatchingProviderContract
                 $_controller = Injector::call($_controller);
                 call_user_func_array([$_controller, $action], $variables);
 
-                return;
+                exit;
             }
         }
     }

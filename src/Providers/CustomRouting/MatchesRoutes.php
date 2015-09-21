@@ -11,12 +11,6 @@ namespace Nanozen\Providers\CustomRouting;
 trait MatchesRoutes
 {
 
-    protected $matchedRoutes = [];
-
-    protected $extractedVariables = [];
-
-    protected $allowedRequestMethods = ['get', 'post', 'patch', 'put', 'delete'];
-
     public function match()
     {
         return $this->performRouteMatchingAlgorithm();
@@ -24,15 +18,7 @@ trait MatchesRoutes
 
     private function performRouteMatchingAlgorithm()
     {	
-        $url =
-            ! isset($_GET['url']) || trim($_GET['url']) == ""
-                ? $_GET['url'] = '/'
-                : $_GET['url'];
-
-        $urlSegments =
-            $url == '/'
-                ? ['/']
-                : preg_split('#/#', $_GET['url'], null, PREG_SPLIT_NO_EMPTY);
+        $this->parseUrl();
 
         $requestMethod = strtolower($_SERVER['REQUEST_METHOD']);
 
@@ -44,7 +30,7 @@ trait MatchesRoutes
             $routeSegments = $route == '/'
                 ? ['/']
                 : preg_split('#/#', $route, null, PREG_SPLIT_NO_EMPTY);
-            $urlSegmentsCount = count($urlSegments);
+            $urlSegmentsCount = count($this->urlSegments);
             $routeSegmentsCount = count($routeSegments);
 
             $routeMatches = true;
@@ -55,7 +41,7 @@ trait MatchesRoutes
 
             for ($i = 0; $i < $routeSegmentsCount; $i++) {
                 $currentRouteSegment = $routeSegments[$i];
-                $currentUrlSegment = isset($urlSegments[$i]) ? $urlSegments[$i] : null;
+                $currentUrlSegment = isset($this->urlSegments[$i]) ? $this->urlSegments[$i] : null;
 
                 if ($this->isRouteSegmentParameter($currentRouteSegment)) {
                     if ($currentUrlSegment == null &&
@@ -120,57 +106,7 @@ trait MatchesRoutes
 
         // Automatic routing.
         if (empty($this->matchedRoutes)) {
-            $controllerClassName = null;
-            $action = null;
-
-            if (isset($urlSegments[0])) {
-                // If the url is '/' - get the default controller.
-                if ($urlSegments[0] == '/') {
-                    $defaultControllerFullName = $this->configProviderContract->get('defaults.controller');
-                    $defaultControllerFullClassNameSplitted = preg_split("/\\\/", $defaultControllerFullName, null, PREG_SPLIT_NO_EMPTY);
-                    $controllerClassName = end($defaultControllerFullClassNameSplitted);
-                    $controllerFullName = $defaultControllerFullName;
-                }
-                // Else - get the specified controller from the url.
-                else {
-                    $controllerClassName = ucfirst($urlSegments[0]) . 'Controller';
-                    $controllerFullName = $this->configProviderContract->get('namespaces.controllers') . $controllerClassName;    
-                }
-
-                unset($urlSegments[0]);
-            }
-
-            if (isset($urlSegments[1])) {
-                $action = $urlSegments[1];
-                unset($urlSegments[1]);
-            }
-            
-            if (is_null($action)) {
-                $action = $this->configProviderContract->get('defaults.action');
-            }
-
-            // Check if the action is reserved by a custom route.
-            // If so - false.
-            if ($this->actionReservedByCustomRoute($controllerClassName, $action)) {
-                return false;
-            }
-
-            $params = ! empty($urlSegments) ? array_values($urlSegments) : [];
-
-            if (class_exists($controllerFullName)) {
-                $controllerObject = new $controllerFullName;    
-
-                if (method_exists($controllerObject, $action)) {
-                    $target = [
-                        'type' => 'automatic_match',
-                        'controller' => $controllerFullName,
-                        'action' => $action,
-                        'params' => $params,
-                    ];
-                    
-                    return $target;
-                }
-            } 
+            $this->autoRoutingProviderContract->invoke($this->routes);
         }
 
         if ( ! empty($this->matchedRoutes)) {
@@ -206,20 +142,20 @@ trait MatchesRoutes
         return $countOfOptionalRouteSegments;
     }
 
-    public function actionReservedByCustomRoute($controller, $action)
-    {
-        foreach ($this->routes as $routeMethod => $route) {
-            foreach ($route as $currentRoute) {
-                list($currentRouteController, $currentRouteAction) = 
-                    preg_split('/@/', $currentRoute, null, PREG_SPLIT_NO_EMPTY);
+    // public function actionReservedByCustomRoute($controller, $action)
+    // {
+    //     foreach ($this->routes as $routeMethod => $route) {
+    //         foreach ($route as $currentRoute) {
+    //             list($currentRouteController, $currentRouteAction) = 
+    //                 preg_split('/@/', $currentRoute, null, PREG_SPLIT_NO_EMPTY);
 
-                if ($currentRouteController == $controller && $currentRouteAction == $action) {
-                    return true;
-                }
-            }
-        }
+    //             if ($currentRouteController == $controller && $currentRouteAction == $action) {
+    //                 return true;
+    //             }
+    //         }
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 
 }

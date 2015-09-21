@@ -3,6 +3,7 @@
 namespace Nanozen\Providers\CustomRouting;
 
 use Nanozen\App\Base;
+use Nanozen\Providers\Routing\RoutingProvider;
 use Nanozen\Contracts\Providers\CustomRouting\DispatchingProviderContract;
 use Nanozen\Contracts\Providers\CustomRouting\CustomRoutingProviderContract;
 
@@ -12,27 +13,11 @@ use Nanozen\Contracts\Providers\CustomRouting\CustomRoutingProviderContract;
  * @author brslv
  * @package Nanozen\Providers\CustomRouting
  */
-class CustomRoutingProvider implements CustomRoutingProviderContract
+class CustomRoutingProvider extends RoutingProvider implements CustomRoutingProviderContract
 {
 
     use AddsRoutes;
     use MatchesRoutes;
-    
-    public $dependsOn = ['dispatchingProviderContract', 'configProviderContract'];
-
-    public $routes = [
-        'get' => [],
-        'post' => [],
-        'patch' => [],
-        'put' => [],
-        'delete' => [],
-    ];
-
-    protected $patterns = [
-        ':i' => '#[0-9]+#',         // represents integers
-        ':s' => '#[a-zA-Z]+#',      // represents strings
-        ':a' => '#.+#',             // represents everything
-    ];
 
     public function addPattern($alias, $pattern)
     {

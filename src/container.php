@@ -19,6 +19,11 @@ Injector::prepare(
 		'\Nanozen\Providers\CustomRouting\DispatchingProvider');
 
 Injector::prepare(
+		InjectorTypes::TYPE_CLASS,
+		'autoRoutingProviderContract',
+		'\Nanozen\Providers\AutoRouting\AutoRoutingProvider');
+
+Injector::prepare(
 		InjectorTypes::TYPE_SINGLETON,
 		'customRoutingProviderContract',
 		'\Nanozen\Providers\CustomRouting\CustomRoutingProvider',

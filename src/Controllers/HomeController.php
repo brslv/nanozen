@@ -13,10 +13,7 @@ use Nanozen\Providers\Controller\BaseControllerProvider as BaseController;
 class HomeController extends BaseController
 {
 
-    public function index() 
-    {
-        echo "The default action.";
-    }
+    
 
     /**
      * Experimenting.
