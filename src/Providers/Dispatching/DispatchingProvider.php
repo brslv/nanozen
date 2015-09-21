@@ -76,29 +76,16 @@ class DispatchingProvider implements DispatchingProviderContract
         exit();
     }
 
-    /**
-     * @param $target
-     * @return array
-     */
     private function extractControllerAndActionFromTarget($target)
     {
         return preg_split('/@/', $target, null, PREG_SPLIT_NO_EMPTY);
     }
 
-    /**
-     * @param $controller
-     * @return bool
-     */
     private function controllerExists($controller)
     {
         return class_exists($controller);
     }
 
-    /**
-     * @param $controller
-     * @param $action
-     * @return bool
-     */
     private function actionExists($controller, $action)
     {
         return method_exists($controller, $action);

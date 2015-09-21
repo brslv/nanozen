@@ -14,11 +14,13 @@
 
 $router->get('/', 'HomeController@welcome'); 
 
-$router->get('aloha/{name:a}', 'HomeController@aloha');
+$router->get('aloha/{name:b}', 'HomeController@aloha');
 
 $router->get('bye', 'HomeController@bye');
 
 $router->get('nice', 'TestController@nice');
+
+// $router->get('blabla', 'HomeController@automatic');
 
 // When this route is available
 // it will override the default behaviour

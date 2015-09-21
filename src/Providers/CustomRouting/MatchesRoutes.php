@@ -3,7 +3,7 @@
 namespace Nanozen\Providers\CustomRouting;
 
 /**
- * Class MatchesRoutes
+ * Trait MatchesRoutes
  *
  * @author brslv
  * @package Nanozen\Providers\CustomRouting

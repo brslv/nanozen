@@ -3,6 +3,7 @@
 namespace Nanozen\App;
 
 use Nanozen\Contracts\Providers\CustomRouting\CustomRoutingProviderContract;
+
 /**
  * Trait SetsUpRoutes
  * 

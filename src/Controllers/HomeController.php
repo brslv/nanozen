@@ -44,7 +44,7 @@ class HomeController extends BaseController
         echo "Bye, bye, whoever you were.";
     }
 
-    public function automatic()
+    public function automatic($params)
     {
         echo "Automatic route";
     }

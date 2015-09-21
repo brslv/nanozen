@@ -11,11 +11,6 @@ namespace Nanozen\Providers\Model;
 class BaseModelProvider
 {
 
-    /**
-     * This class depends on ConfigProviderContract.
-     *
-     * @var \Nanozen\Providers\Config\ConfigProvider
-     */
     public $dependsOn = ['configProviderContract'];
 
 }

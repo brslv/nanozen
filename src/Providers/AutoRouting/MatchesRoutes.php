@@ -2,6 +2,12 @@
 
 namespace Nanozen\Providers\AutoRouting;
 
+/**
+ * Trait MatchesRoutes
+ *
+ * @author brslv
+ * @package  Nanozen\Providers\AutoRouting
+ */
 trait MatchesRoutes
 {
 
@@ -53,25 +59,14 @@ trait MatchesRoutes
 
         $params = ! empty($this->urlSegments) ? array_values($this->urlSegments) : [];
 
-        if (class_exists($controllerFullName)) {
-            $controllerObject = new $controllerFullName;    
-
-            if (method_exists($controllerObject, $action)) {
-                $target = [
-                    'type' => 'automatic_match',
-                    'controller' => $controllerFullName,
-                    'action' => $action,
-                    'params' => $params,
-                ];
-                
-                return $target;
-            }
-        } 
+        if (($target = $this->targetCanBeCalled($controllerFullName, $action, $params)) != false) {
+            return $target;
+        }
 
         return false;
 	}
 
-	private function actionReservedByCustomRoute($controller, $action)
+    private function actionReservedByCustomRoute($controller, $action)
     {
         foreach ($this->routes as $routeMethod => $route) {
             foreach ($route as $currentRoute) {
@@ -85,6 +80,39 @@ trait MatchesRoutes
         }
 
         return false;
+    }
+
+    private function targetCanBeCalled($controller, $action, $params) 
+    {
+        if (class_exists($controller)) {
+            $controllerObject = new $controller;    
+
+            if (method_exists($controllerObject, $action)) {
+
+                if ( ! $this->requiredParamsAreAvailable($controllerObject, $action, $params)) {
+                    throw new \Exception('THROW 404'); // TODO throw 404 here!
+                }
+
+                $target = [
+                    'type' => 'automatic_match',
+                    'controller' => $controller,
+                    'action' => $action,
+                    'params' => $params,
+                ];
+                
+                return $target;
+            }
+        }
+
+        return false;
+    }
+
+    private function requiredParamsAreAvailable($controller, $action, $params)
+    {
+        $reflector = new \ReflectionMethod($controller, $action);
+        $requiredParamsCount = $reflector->getNumberOfRequiredParameters();
+
+        return $requiredParamsCount <= count($params);
     }
 
 }

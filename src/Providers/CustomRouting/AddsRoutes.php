@@ -10,6 +10,7 @@ namespace Nanozen\Providers\CustomRouting;
  */
 trait AddsRoutes
 {
+
     public function get($route, $target)
     {
         $this->routes['get'][$route] = $target;
@@ -34,4 +35,5 @@ trait AddsRoutes
     {
         $this->routes['delete'][$route] = $target;
     }
+    
 }

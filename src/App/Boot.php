@@ -13,7 +13,7 @@ class Boot
 
     use SetsUpInjector;
     use SetsUpRoutes;
-    
+   
     public function __construct()
     {
         $this->setupInjector();

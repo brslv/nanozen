@@ -7,7 +7,7 @@ use Nanozen\Providers\CustomRouting\DispatchingProvider;
 use Nanozen\Providers\CustomRouting\CustomRoutingProvider;
 
 /**
- * Class SetsUpInjector
+ * Trait SetsUpInjector
  *
  * @author brslv
  * @package Nanozen\App
