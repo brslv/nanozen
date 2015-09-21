@@ -16,7 +16,7 @@ Injector::prepare(
 Injector::prepare(
 		InjectorTypes::TYPE_CLASS,
 		'dispatchingProviderContract',
-		'\Nanozen\Providers\CustomRouting\DispatchingProvider');
+		'\Nanozen\Providers\Dispatching\DispatchingProvider');
 
 Injector::prepare(
 		InjectorTypes::TYPE_CLASS,

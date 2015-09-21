@@ -1,16 +1,16 @@
 <?php
 
-namespace Nanozen\Providers\CustomRouting;
+namespace Nanozen\Providers\Dispatching;
 
 use Nanozen\App\Base;
 use Nanozen\App\Injector;
-use Nanozen\Contracts\Providers\CustomRouting\DispatchingProviderContract;
+use Nanozen\Contracts\Providers\Dispatching\DispatchingProviderContract;
 
 /**
  * Class DispatchProvider
  *
  * @author brslv
- * @package Nanozen\Providers\CustomRouting
+ * @package Nanozen\Providers\Dispatching
  */
 class DispatchingProvider implements DispatchingProviderContract
 {
