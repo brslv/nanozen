@@ -23,5 +23,5 @@ Injector::prepare(
 		'customRoutingProviderContract',
 		'\Nanozen\Providers\CustomRouting\CustomRoutingProvider',
 		[
-				'\Nanozen\Providers\CustomRouting\DispatchingProvider',
+			'\Nanozen\Providers\CustomRouting\DispatchingProvider',
 		]);

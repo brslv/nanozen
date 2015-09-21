@@ -1,4 +1,8 @@
 {
+	"defaults": {
+		"controller": "Nanozen\\Controllers\\HomeController",
+		"action": "index"
+	},
     "namespaces": {
         "controllers": "Nanozen\\Controllers\\",
         "models": "Nanozen\\Models\\",

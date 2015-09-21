@@ -18,7 +18,7 @@ class CustomRoutingProvider implements CustomRoutingProviderContract
     use AddsRoutes;
     use MatchesRoutes;
     
-    public $dependsOn = ['dispatchingProviderContract'];
+    public $dependsOn = ['dispatchingProviderContract', 'configProviderContract'];
 
     public $routes = [
         'get' => [],

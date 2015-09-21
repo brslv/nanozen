@@ -118,6 +118,61 @@ trait MatchesRoutes
             }
         }
 
+        // Automatic routing.
+        if (empty($this->matchedRoutes)) {
+            $controllerClassName = null;
+            $action = null;
+
+            if (isset($urlSegments[0])) {
+                // If the url is '/' - get the default controller.
+                if ($urlSegments[0] == '/') {
+                    $defaultControllerFullName = $this->configProviderContract->get('defaults.controller');
+                    $defaultControllerFullClassNameSplitted = preg_split("/\\\/", $defaultControllerFullName, null, PREG_SPLIT_NO_EMPTY);
+                    $controllerClassName = end($defaultControllerFullClassNameSplitted);
+                    $controllerFullName = $defaultControllerFullName;
+                }
+                // Else - get the specified controller from the url.
+                else {
+                    $controllerClassName = ucfirst($urlSegments[0]) . 'Controller';
+                    $controllerFullName = $this->configProviderContract->get('namespaces.controllers') . $controllerClassName;    
+                }
+
+                unset($urlSegments[0]);
+            }
+
+            if (isset($urlSegments[1])) {
+                $action = $urlSegments[1];
+                unset($urlSegments[1]);
+            }
+            
+            if (is_null($action)) {
+                $action = $this->configProviderContract->get('defaults.action');
+            }
+
+            // Check if the action is reserved by a custom route.
+            // If so - false.
+            if ($this->actionReservedByCustomRoute($controllerClassName, $action)) {
+                return false;
+            }
+
+            $params = ! empty($urlSegments) ? array_values($urlSegments) : [];
+
+            if (class_exists($controllerFullName)) {
+                $controllerObject = new $controllerFullName;    
+
+                if (method_exists($controllerObject, $action)) {
+                    $target = [
+                        'type' => 'automatic_match',
+                        'controller' => $controllerFullName,
+                        'action' => $action,
+                        'params' => $params,
+                    ];
+                    
+                    return $target;
+                }
+            } 
+        }
+
         if ( ! empty($this->matchedRoutes)) {
             // The target of the first matched route.
 
@@ -149,6 +204,22 @@ trait MatchesRoutes
         }
 
         return $countOfOptionalRouteSegments;
+    }
+
+    public function actionReservedByCustomRoute($controller, $action)
+    {
+        foreach ($this->routes as $routeMethod => $route) {
+            foreach ($route as $currentRoute) {
+                list($currentRouteController, $currentRouteAction) = 
+                    preg_split('/@/', $currentRoute, null, PREG_SPLIT_NO_EMPTY);
+
+                if ($currentRouteController == $controller && $currentRouteAction == $action) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
 }

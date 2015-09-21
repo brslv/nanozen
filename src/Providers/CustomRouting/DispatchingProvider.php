@@ -19,6 +19,7 @@ class DispatchingProvider implements DispatchingProviderContract
 
     public function dispatch($target, $variables)
     {
+
         if ( ! $target) {
             $this->throw404();
         }
@@ -27,6 +28,20 @@ class DispatchingProvider implements DispatchingProviderContract
         {
             call_user_func($target);
             exit();
+        }
+
+        // Here call the target if it's comming from the automatic route matching mechanism.
+        // Should call AutoRouting\DispatchingProvider->dispatch
+        if (is_array($target) && 
+            ! empty($target) && 
+            $target['type'] == 'automatic_match'
+        ) {
+            $controller = $target['controller'];
+            $action = $target['action'];
+            $params = $target['params'];
+
+            call_user_func_array([new $controller, $action], $params);
+            return;
         }
 
         list($controller, $action) = $this->extractControllerAndActionFromTarget($target);
@@ -47,6 +62,8 @@ class DispatchingProvider implements DispatchingProviderContract
             if ($this->actionExists($_controller, $action)) {
                 $_controller = Injector::call($_controller);
                 call_user_func_array([$_controller, $action], $variables);
+
+                return;
             }
         }
     }

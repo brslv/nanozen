@@ -13,6 +13,11 @@ use Nanozen\Providers\Controller\BaseControllerProvider as BaseController;
 class HomeController extends BaseController
 {
 
+    public function index() 
+    {
+        echo "The default action.";
+    }
+
     /**
      * Experimenting.
      *
@@ -32,6 +37,11 @@ class HomeController extends BaseController
     public function bye()
     {
         echo "Bye, bye, whoever you were.";
+    }
+
+    public function automatic()
+    {
+        echo "Automatic route";
     }
 
 }
