@@ -2,6 +2,8 @@
 
 namespace Nanozen\Contracts\Providers\CustomRouting;
 
+use Nanozen\Contracts\GenericRoutingContract;
+
 /**
  * Interface RoutingProviderContract
  *
@@ -22,7 +24,5 @@ interface CustomRoutingProviderContract
     function delete($route, $target);
 
     function invoke();
-
-    function match();
 
 }

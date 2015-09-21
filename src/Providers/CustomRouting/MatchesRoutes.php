@@ -11,7 +11,7 @@ namespace Nanozen\Providers\CustomRouting;
 trait MatchesRoutes
 {
 
-    public function match()
+    protected function match()
     {
         return $this->performRouteMatchingAlgorithm();
     }
