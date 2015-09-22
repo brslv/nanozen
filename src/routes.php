@@ -14,7 +14,7 @@
 
 $router->get('/', 'HomeController@welcome'); 
 
-$router->get('aloha/{name:b}', 'HomeController@aloha');
+$router->get('aloha/{name:s}', 'HomeController@aloha');
 
 $router->get('bye', 'HomeController@bye');
 
