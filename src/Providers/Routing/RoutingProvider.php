@@ -25,6 +25,19 @@ class RoutingProvider
         'delete' => [],
     ];
 
+    protected $areas = [
+        // 'forum' => [
+        //      'folder' => 'ForumArea'
+        //      'routes' => [
+        //          'get' => [],
+        //          'post' => [],
+        //          'put' => [],
+        //          ...
+        //          ...
+        //      ]
+        // ]
+    ];
+
     protected $allowedRequestMethods = ['get', 'post', 'patch', 'put', 'delete'];
 
     protected $patterns = [

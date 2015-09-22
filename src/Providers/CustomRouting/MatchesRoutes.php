@@ -20,6 +20,10 @@ trait MatchesRoutes
     {	
         $this->parseUrl();
 
+        // if isset($this->urlSegments[0])
+        //      if (array_key_exists($this->routes['areas'], $this->urlSegments[0]))
+        //          => call area route.
+
         $requestMethod = strtolower($_SERVER['REQUEST_METHOD']);
 
         if ( ! in_array($requestMethod, $this->allowedRequestMethods)) {

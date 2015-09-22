@@ -20,7 +20,9 @@ $router->get('bye', 'HomeController@bye');
 
 $router->get('nice', 'TestController@nice');
 
-// $router->get('blabla', 'HomeController@automatic');
+$router->area('forum', 'Forum'); // forum is the area's url prefix; Forum is the area's folder.
+
+$router->forArea('forum')->get('topics', 'TopicsController@index'); // adds new route for the forum area.
 
 // When this route is available
 // it will override the default behaviour
