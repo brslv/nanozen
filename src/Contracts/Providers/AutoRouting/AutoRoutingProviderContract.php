@@ -11,6 +11,6 @@ namespace Nanozen\Contracts\Providers\AutoRouting;
 interface AutoRoutingProviderContract
 {
 
-	function invoke(array $customRoutes);
+	function invoke(array $customRoutes, array $areas);
 
 }

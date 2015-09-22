@@ -15,6 +15,8 @@ trait AddsRoutes
 
     public function get($route, $target)
     {
+        $route = ltrim($route, '/');
+
         if ( ! is_null($this->forArea)) {
             $this->areas[$this->forArea]['routes']['get'][$route] = $target;
             $this->forArea = null;
@@ -26,6 +28,8 @@ trait AddsRoutes
 
     public function post($route, $target)
     {
+        $route = ltrim($route, '/');
+
         if ( ! is_null($this->forArea)) {
             $this->areas[$this->forArea]['routes']['post'][$route] = $target;
             $this->forArea = null;
@@ -37,6 +41,8 @@ trait AddsRoutes
 
     public function patch($route, $target)
     {
+        $route = ltrim($route, '/');
+
         if ( ! is_null($this->forArea)) {
             $this->areas[$this->forArea]['routes']['patch'][$route] = $target;
             $this->forArea = null;
@@ -48,6 +54,8 @@ trait AddsRoutes
 
     public function put($route, $target)
     {
+        $route = ltrim($route, '/');
+
         if ( ! is_null($this->forArea)) {
             $this->areas[$this->forArea]['routes']['put'][$route] = $target;
             $this->forArea = null;
@@ -59,6 +67,8 @@ trait AddsRoutes
 
     public function delete($route, $target)
     {
+        $route = ltrim($route, '/');
+
         if ( ! is_null($this->forArea)) {
             $this->areas[$this->forArea]['routes']['delete'][$route] = $target;
             $this->forArea = null;
@@ -72,6 +82,8 @@ trait AddsRoutes
     
     public function area($routePrefix, $areaFolder) 
     {
+        $routePrefix = ltrim($routePrefix, '/');
+
         $this->areas[$routePrefix]['folder'] = $areaFolder;
         $this->areas[$routePrefix]['routes'] = [
             'get' => [],

@@ -5,6 +5,7 @@
 	},
     "namespaces": {
         "controllers": "Nanozen\\Controllers\\",
+        "areas": "Nanozen\\Areas\\",
         "models": "Nanozen\\Models\\",
         "providers": "Nanozen\\Providers\\",
         "views": "Nanozen\\Views\\"

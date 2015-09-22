@@ -18,9 +18,9 @@ class AutoRoutingProvider extends RoutingProvider implements AutoRoutingProvider
 
 	public $dependsOn = ['configProviderContract', 'dispatchingProviderContract'];
 
-	public function invoke(array $customRoutes)
+	public function invoke(array $customRoutes, array $areas)
 	{
-		$target = $this->matchAndPrefer($customRoutes);
+		$target = $this->matchAndPrefer($customRoutes, $areas);
 
 		$this->dispatchingProviderContract->dispatch($target, null);
 	}

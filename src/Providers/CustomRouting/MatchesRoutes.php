@@ -19,10 +19,15 @@ trait MatchesRoutes
     private function performRouteMatchingAlgorithm()
     {	
         $this->parseUrl();
+        $routesArray = $this->routes;
+        $isAreaRoute = false;
+        
+        if (array_key_exists($this->urlSegments[0], $this->areas)) { // TODO: extract in method areaExists($area);
+            $routesArray = $this->areas[$this->urlSegments[0]]['routes'];
+            $isAreaRoute = true;
+        }
 
-        // if isset($this->urlSegments[0])
-        //      if (array_key_exists($this->routes['areas'], $this->urlSegments[0]))
-        //          => call area route.
+        // print_r($routesArray); die();
 
         $requestMethod = strtolower($_SERVER['REQUEST_METHOD']);
 
@@ -30,7 +35,9 @@ trait MatchesRoutes
             throw new \Exception("HTTP method {$requestMethod} not allowed.");
         }
 
-        foreach ($this->routes[$requestMethod] as $route => $target) {
+        foreach ($routesArray[$requestMethod] as $route => $target) {
+            if ($isAreaRoute) $route = $this->urlSegments[0] . '/' . $route;
+
             $routeSegments = $route == '/'
                 ? ['/']
                 : preg_split('#/#', $route, null, PREG_SPLIT_NO_EMPTY);
@@ -110,13 +117,28 @@ trait MatchesRoutes
 
         // Automatic routing.
         if (empty($this->matchedRoutes)) {
-            $this->autoRoutingProviderContract->invoke($this->routes);
+            $this->autoRoutingProviderContract->invoke($this->routes, $this->areas);
         }
 
+        // Check for area route and match it.
         if ( ! empty($this->matchedRoutes)) {
             // The target of the first matched route.
+            if ($isAreaRoute) {
+                $matched = $this->matchedRoutes[0] != $this->urlSegments[0] . '//'
+                    ? ltrim(substr($this->matchedRoutes[0], strlen($this->urlSegments[0])), '/')
+                    : '/';
 
-            $target = $this->routes[$requestMethod][$this->matchedRoutes[0]];
+                if (isset($this->areas[$this->urlSegments[0]]['folder'])) {
+                    $areaFolderPrefix = $this->areas[$this->urlSegments[0]]['folder'];
+                } else {
+                    throw new \Exception('No such area. Did you missed to initiate area before adding a route to it?');
+                }
+                
+                $target = $areaFolderPrefix . '|' . $this->areas[$this->urlSegments[0]]['routes'][$requestMethod][$matched];
+            } else {
+                $target = $this->routes[$requestMethod][$this->matchedRoutes[0]];
+            }
+
             return $target;
         }
 

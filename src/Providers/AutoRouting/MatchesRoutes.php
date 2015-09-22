@@ -11,9 +11,11 @@ namespace Nanozen\Providers\AutoRouting;
 trait MatchesRoutes
 {
 
-    protected function matchAndPrefer($customRoutes)
+    protected function matchAndPrefer($customRoutes, $areas)
     {
         $this->routes = $customRoutes;
+
+        $this->areas = $areas;
 
         return $this->performMatchingAlgorithm(); 
     }
@@ -35,6 +37,12 @@ trait MatchesRoutes
             }
             // Else - get the specified controller from the url.
             else {
+                // check if the user is calling a areas route
+                if (array_key_exists($this->urlSegments[0], $this->areas))
+                {
+                    echo "this is area route";
+                }
+
                 $controllerClassName = ucfirst($this->urlSegments[0]) . 'Controller';
                 $controllerFullName = $this->configProviderContract->get('namespaces.controllers') . $controllerClassName;    
             }

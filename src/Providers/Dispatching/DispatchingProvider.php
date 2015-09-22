@@ -17,6 +17,8 @@ class DispatchingProvider implements DispatchingProviderContract
 
     public $dependsOn = ['configProviderContract'];
 
+    private $isAreaRoute = false;
+
     public function dispatch($target, $variables)
     {
 
@@ -31,7 +33,6 @@ class DispatchingProvider implements DispatchingProviderContract
         }
 
         // Here call the target if it's comming from the automatic route matching mechanism.
-        // Should call AutoRouting\DispatchingProvider->dispatch
         if (is_array($target) && 
             ! empty($target) && 
             $target['type'] == 'automatic_match'
@@ -45,8 +46,21 @@ class DispatchingProvider implements DispatchingProviderContract
             exit;
         }
 
+        if (strpos($target, '|')) {
+            $this->isAreaRoute = true;
+
+            list($areaFolderPrefix, $targetControllerAndAction) = explode('|', $target);
+            $target = $targetControllerAndAction;
+        }
+
         list($controller, $action) = $this->extractControllerAndActionFromTarget($target);
+        
         $_controller = $this->configProviderContract->get('namespaces.controllers') . $controller;
+
+        if ($this->isAreaRoute) {
+            $areasNamespace = $this->configProviderContract->get('namespaces.areas');
+            $_controller = $areasNamespace . $areaFolderPrefix . '\\Controllers\\' . $controller;
+        }
 
         if ($this->controllerExists($_controller)) {
             $variablesCount = count($variables);
