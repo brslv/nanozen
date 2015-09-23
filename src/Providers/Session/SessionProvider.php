@@ -16,6 +16,8 @@ class SessionProvider implements SessionProviderContract
 	public static function put($key, $value)
 	{
 		$_SESSION[$key]	= $value;
+
+		return $_SESSION[$key];
 	}
 
 	public static function get($key = null)

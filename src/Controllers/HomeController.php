@@ -45,7 +45,12 @@ class HomeController extends BaseController
 
     public function bye()
     {
-        echo "Bye, bye, whoever you were.";
+        echo Form::start('index_bla.php', 'PUT');
+            echo Form::text('username');
+            echo Form::password('pswd');
+        echo Form::stop();
+
+        // echo "Bye, bye, whoever you were.";
     }
 
     public function automatic()

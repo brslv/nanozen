@@ -2,6 +2,8 @@
 
 namespace Nanozen\Utilities\Html;
 
+use Nanozen\Utilities\Csrf;
+
 /**
  * Class Form
  *
@@ -11,41 +13,39 @@ namespace Nanozen\Utilities\Html;
 class Form
 {
 
+	use PutsAttributes;
+	use CanGenerateHiddenField;
+	use GeneratesCsrfTokenSignature;
+	use GeneratesHttpMethodSignature;
+
 	public static function radio($name, $value, array $attributes = null, $text = null) 
 	{
+		if (is_null($text)) {
+			$text = ucfirst($name);
+		}
+		
 		return 
-			static::genericInput('radio', $name, $value, $attributes, $text);
+			InputBuilder::build('radio', $name, $value, $attributes, $text);
 	}
 
-	protected static function genericInput($type, $name, $value, array $attributes = null, $text = null) 
+	public static function checkbox($name, $value, array $attributes = null, $text = null)
 	{
 		if (is_null($text)) {
 			$text = ucfirst($name);
 		}
 
-		$input = sprintf('<input type="%s" name="%s" value="%s"', $type, $name, $value);
-
-		static::putAttributes($attributes, $input);
-
-		$input .= sprintf(' /> %s ', $text);
-		return $input;
-	}
-
-	protected static function putAttributes($attributes, &$elementStringRepresentation)
-	{
-		if ( ! empty($attributes) && ! is_null($attributes)) {
-			foreach ($attributes as $attrName => $attrValue) {
-				$elementStringRepresentation .= sprintf(' %s="%s"', $attrName, $attrValue);
-			}
-		}
-
-		return $elementStringRepresentation;
-	}
-
-	public static function check($name, $value, array $attributes = null, $text = null)
-	{
 		return 
-			static::genericInput('checkbox', $name, $value, $attributes, $text);
+			InputBuilder::build('checkbox', $name, $value, $attributes, $text);
+	}
+
+	public static function text($name, array $attributes = null)
+	{
+		return InputBuilder::build('text', $name, null, $attributes);
+	}
+
+	public static function password($name, array $attributes = null)
+	{
+		return InputBuilder::build('password', $name, null, $attributes);
 	}
 
 	public static function dropdown($name, array $options, array $attributes = null)
@@ -69,28 +69,6 @@ class Form
 		return $dropdown;	
 	}
 
-	public static function text($name, array $attributes = null)
-	{
-		$text = sprintf('<input type="text" name="%s"', $name);
-
-		static::putAttributes($attributes, $text);
-
-		$text .= ' />';
-
-		return $text;
-	}
-
-	public static function password($name, array $attributes = null)
-	{
-		$passwordInput = sprintf('<input type="password" name="%s"', $name);
-
-		static::putAttributes($attributes, $passwordInput);
-
-		$passwordInput .= ' />';
-
-		return $passwordInput;
-	}
-
 	public static function textarea($name, array $attributes = null)
 	{
 		$textarea = sprintf('<textarea name="%s"', $name);
@@ -100,6 +78,21 @@ class Form
 		$textarea .= '></textarea>';
 
 		return $textarea;
+	}
+
+	public static function csrfToken()
+	{
+		return Csrf::generate();
+	}
+
+	public static function start($action, $method = null, array $attributes = null)
+	{
+		return FormBuilder::build($action, $method, $attributes);
+	}
+
+	public static function stop()
+	{
+		return '</form>';
 	}
 
 }
