@@ -45,15 +45,6 @@ class HomeController extends BaseController
 
     public function bye()
     {
-        echo Form::check('checking', 10, null, 'Chckbox, baby!') . '<br />';
-        echo Form::dropdown('dropdownNameHere', [
-            'volvo' => 'Volvo',
-            'mercedes' => 'Mercedes',
-        ]);
-        echo Form::password('pass', ['style' => 'height: 60px;']);
-
-        echo Form::textarea('textareaTest', ['style' => 'width: 100%; height: 200px;']);
-
         echo "Bye, bye, whoever you were.";
     }
 

@@ -14,10 +14,10 @@ class Form
 	public static function radio($name, $value, array $attributes = null, $text = null) 
 	{
 		return 
-			static::simpleInput('radio', $name, $value, $attributes, $text);
+			static::genericInput('radio', $name, $value, $attributes, $text);
 	}
 
-	protected static function simpleInput($type, $name, $value, array $attributes = null, $text = null) 
+	protected static function genericInput($type, $name, $value, array $attributes = null, $text = null) 
 	{
 		if (is_null($text)) {
 			$text = ucfirst($name);
@@ -45,7 +45,7 @@ class Form
 	public static function check($name, $value, array $attributes = null, $text = null)
 	{
 		return 
-			static::simpleInput('checkbox', $name, $value, $attributes, $text);
+			static::genericInput('checkbox', $name, $value, $attributes, $text);
 	}
 
 	public static function dropdown($name, array $options, array $attributes = null)
@@ -67,6 +67,17 @@ class Form
 		$dropdown .= "</select>";
 
 		return $dropdown;	
+	}
+
+	public static function text($name, array $attributes = null)
+	{
+		$text = sprintf('<input type="text" name="%s"', $name);
+
+		static::putAttributes($attributes, $text);
+
+		$text .= ' />';
+
+		return $text;
 	}
 
 	public static function password($name, array $attributes = null)
