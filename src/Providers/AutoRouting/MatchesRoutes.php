@@ -11,6 +11,12 @@ namespace Nanozen\Providers\AutoRouting;
 trait MatchesRoutes
 {
 
+    private $isAreaRoute = false;
+
+    private $controllerUrlIndex = 0;
+
+    private $actionUrlIndex = 1;
+
     protected function matchAndPrefer($customRoutes, $areas)
     {
         $this->routes = $customRoutes;
@@ -24,16 +30,12 @@ trait MatchesRoutes
 	{
         $this->parseUrl();
 
-        $isAreaRoute = false;
-        $controllerUrlIndex = 0;
-        $actionUrlIndex = 1;
-
 		$controllerClassName = null;
         $action = null;
 
-        if (isset($this->urlSegments[$controllerUrlIndex])) {
+        if (isset($this->urlSegments[$this->controllerUrlIndex])) {
             // If the url is '/' - get the default controller.
-            if ($this->urlSegments[$controllerUrlIndex] == '/') {
+            if ($this->urlSegments[$this->controllerUrlIndex] == '/') {
                 $defaultControllerFullName = $this->configProviderContract->get('defaults.controller');
                 $defaultControllerFullClassNameSplitted = preg_split("/\\\/", $defaultControllerFullName, null, PREG_SPLIT_NO_EMPTY);
                 $controllerClassName = end($defaultControllerFullClassNameSplitted);
@@ -42,35 +44,26 @@ trait MatchesRoutes
             // Else - get the specified controller from the url.
             else {
                 // check if the user is calling a areas route
-                if (array_key_exists($this->urlSegments[$controllerUrlIndex], $this->areas))
+                if ($this->userCallsForAreaRoute())
                 {
-                    $isAreaRoute = true;
-                    $controllerUrlIndex = 1;
-                    $actionUrlIndex = 2;
+                    $this->switchToAutoRouteMatchingForAreas();
                 }
 
-                if (isset($this->areas[$this->urlSegments[0]]['folder'])) {
-                    $areaFolderPrefix = $this->areas[$this->urlSegments[0]]['folder'];
-                }
-
-                $defaultControllerNamespace = $isAreaRoute == false
-                    ? $this->configProviderContract->get('namespaces.controllers')
-                    : $this->configProviderContract->get('namespaces.areas') . $areaFolderPrefix . '\\Controllers\\';
-
+                $defaultControllerNamespace = $this->getDefaultControllerNamespace();
                 $controllerClassName = $this->configProviderContract->get('defaults.controller_area');
 
-                if (isset($this->urlSegments[$controllerUrlIndex])) {
-                    $controllerClassName = ucfirst($this->urlSegments[$controllerUrlIndex]) . 'Controller';
+                if (isset($this->urlSegments[$this->controllerUrlIndex])) {
+                    $controllerClassName = ucfirst($this->urlSegments[$this->controllerUrlIndex]) . 'Controller';
                 }
                 $controllerFullName = $defaultControllerNamespace . $controllerClassName; 
             }
 
-            unset($this->urlSegments[$controllerUrlIndex]);
+            unset($this->urlSegments[$this->controllerUrlIndex]);
         }
 
-        if (isset($this->urlSegments[$actionUrlIndex])) {
-            $action = $this->urlSegments[$actionUrlIndex];
-            unset($this->urlSegments[$actionUrlIndex]);
+        if (isset($this->urlSegments[$this->actionUrlIndex])) {
+            $action = $this->urlSegments[$this->actionUrlIndex];
+            unset($this->urlSegments[$this->actionUrlIndex]);
         }
         
         if (is_null($action)) {
@@ -79,13 +72,13 @@ trait MatchesRoutes
 
         // Check if the action is reserved by a custom route.
         // If so - false.
-        if ( ! $isAreaRoute) {
+        if ( ! $this->isAreaRoute) {
             if ($this->actionReservedByCustomRoute($controllerClassName, $action)) {
                 return false;
             }
         }
 
-        if ($isAreaRoute) {
+        if ($this->isAreaRoute) {
             unset($this->urlSegments[0]);
         }
 
@@ -97,6 +90,29 @@ trait MatchesRoutes
 
         return false;
 	}
+
+    private function userCallsForAreaRoute()
+    {
+        return array_key_exists($this->urlSegments[$this->controllerUrlIndex], $this->areas);
+    }
+
+    private function switchToAutoRouteMatchingForAreas()
+    {
+        $this->isAreaRoute = true;
+        $this->controllerUrlIndex = 1;
+        $this->actionUrlIndex = 2;
+    }
+
+    private function getDefaultControllerNamespace()
+    {
+        if (isset($this->areas[$this->urlSegments[0]]['folder'])) {
+            $areaFolderPrefix = $this->areas[$this->urlSegments[0]]['folder'];
+        }
+     
+        return $this->isAreaRoute == false
+                    ? $this->configProviderContract->get('namespaces.controllers')
+                    : $this->configProviderContract->get('namespaces.areas') . $areaFolderPrefix . '\\Controllers\\';
+    }
 
     private function actionReservedByCustomRoute($controller, $action)
     {

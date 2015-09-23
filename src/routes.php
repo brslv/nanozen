@@ -25,7 +25,7 @@ $router->get('nice', 'TestController@nice');
 // By default, the routing is automatic (mapping automatic Controller/action/params).
 // Can be customized by:
 // 		$router->forArea('test')->get('some-route', 'SomeController@action');
-$router->area('test', 'TestArea'); // forum is the area's url prefix; Forum is the area's folder.
+$router->area('test', 'TestArea');
 
 // When this route is available
 // it will override the default behaviour

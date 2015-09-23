@@ -36,6 +36,7 @@ trait MatchesRoutes
         }
 
         foreach ($routesArray[$requestMethod] as $route => $target) {
+            // var_dump($route);
             if ($isAreaRoute) $route = $this->urlSegments[0] . '/' . $route;
 
             $routeSegments = $route == '/'
