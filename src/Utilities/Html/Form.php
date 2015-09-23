@@ -80,4 +80,15 @@ class Form
 		return $passwordInput;
 	}
 
+	public static function textarea($name, array $attributes = null)
+	{
+		$textarea = sprintf('<textarea name="%s"', $name);
+
+		static::putAttributes($attributes, $textarea);
+
+		$textarea .= '></textarea>';
+
+		return $textarea;
+	}
+
 }

@@ -52,6 +52,8 @@ class HomeController extends BaseController
         ]);
         echo Form::password('pass', ['style' => 'height: 60px;']);
 
+        echo Form::textarea('textareaTest', ['style' => 'width: 100%; height: 200px;']);
+
         echo "Bye, bye, whoever you were.";
     }
 
