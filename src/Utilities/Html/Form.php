@@ -51,7 +51,7 @@ class Form
 	public static function dropdown($name, array $options, array $attributes = null)
 	{
 		$dropdown = sprintf('<select');
-		
+
 		static::putAttributes($attributes, $dropdown);
 
 		$dropdown .= '>';
@@ -67,6 +67,17 @@ class Form
 		$dropdown .= "</select>";
 
 		return $dropdown;	
+	}
+
+	public static function password($name, array $attributes = null)
+	{
+		$passwordInput = sprintf('<input type="password" name="%s"', $name);
+
+		static::putAttributes($attributes, $passwordInput);
+
+		$passwordInput .= ' />';
+
+		return $passwordInput;
 	}
 
 }

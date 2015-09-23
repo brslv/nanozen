@@ -50,7 +50,8 @@ class HomeController extends BaseController
             'volvo' => 'Volvo',
             'mercedes' => 'Mercedes',
         ]);
-        
+        echo Form::password('pass', ['style' => 'height: 60px;']);
+
         echo "Bye, bye, whoever you were.";
     }
 
