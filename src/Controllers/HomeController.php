@@ -18,10 +18,10 @@ class HomeController extends BaseController
 
     public function welcome()
     {
-        $welcome = '<b>This is Nanozen.</b>';
+        $welcome = 'This is Nanozen.';
 
         // Uncomment the row below, if you want to cansel html escaping.
-        $this->view()->escape(false);
+        // $this->view()->escape(false);
 
         // Calls view in the folder Views/home -> welcome.php.
         // Passes the $welcome variable to the view.

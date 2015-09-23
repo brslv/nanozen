@@ -37,20 +37,23 @@ class ViewProvider implements ViewProviderContract
 		$this->path = $path;
 	}
 
-	public function render($view, $data)
+	public function render($view, $data = null)
 	{
 		echo $this->fetch($view, $data);
+		exit();
 	}
 
-	public function make($view, $data)
+	public function make($view, $data = null)
 	{
 		return $this->fetch($view, $data);
 	}
 
-	private function fetch($view, $data) 
+	private function fetch($view, $data = null) 
 	{
 		$this->view = $view;
-		$this->data = array_merge($data, $this->data);
+		$this->data = is_null($data) 
+			? $this->data 
+				: array_merge($data, $this->data);
 
 		if (is_null($this->path)) {
 			$this->setDefaultPath();
@@ -105,7 +108,7 @@ class ViewProvider implements ViewProviderContract
 		if (array_key_exists($property, $this->data)) {
 			return $this->escapeHtmlChars 
 				? htmlspecialchars($this->data[$property])
-				: $this->data[$property];
+					: $this->data[$property];
 		}
 
 		// TODO: remove me!		

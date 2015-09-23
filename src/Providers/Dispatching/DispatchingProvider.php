@@ -15,7 +15,7 @@ use Nanozen\Contracts\Providers\Dispatching\DispatchingProviderContract;
 class DispatchingProvider implements DispatchingProviderContract
 {
 
-    public $dependsOn = ['configProviderContract'];
+    public $dependsOn = ['configProviderContract', 'viewProviderContract'];
 
     private $isAreaRoute = false;
 
@@ -86,8 +86,8 @@ class DispatchingProvider implements DispatchingProviderContract
     private function throw404()
     {
         http_response_code(404);
-        echo "<h1>404</h1>";
-        exit();
+        $this->viewProviderContract->render('errors.404');
+        // exit;
     }
 
     private function extractControllerAndActionFromTarget($target)
