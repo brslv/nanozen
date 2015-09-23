@@ -131,7 +131,7 @@ trait MatchesRoutes
                 if (isset($this->areas[$this->urlSegments[0]]['folder'])) {
                     $areaFolderPrefix = $this->areas[$this->urlSegments[0]]['folder'];
                 } else {
-                    throw new \Exception('No such area. Did you missed to initiate area before adding a route to it?');
+                    throw new \Exception('No such area. Did you missed to initiate the area before adding a route to it? Use $router->area() function.');
                 }
                 
                 $target = $areaFolderPrefix . '|' . $this->areas[$this->urlSegments[0]]['routes'][$requestMethod][$matched];

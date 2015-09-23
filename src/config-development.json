@@ -1,6 +1,7 @@
 {
 	"defaults": {
 		"controller": "Nanozen\\Controllers\\HomeController",
+        "controller_area": "HomeController",
 		"action": "index"
 	},
     "namespaces": {

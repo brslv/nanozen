@@ -24,12 +24,16 @@ trait MatchesRoutes
 	{
         $this->parseUrl();
 
+        $isAreaRoute = false;
+        $controllerUrlIndex = 0;
+        $actionUrlIndex = 1;
+
 		$controllerClassName = null;
         $action = null;
 
-        if (isset($this->urlSegments[0])) {
+        if (isset($this->urlSegments[$controllerUrlIndex])) {
             // If the url is '/' - get the default controller.
-            if ($this->urlSegments[0] == '/') {
+            if ($this->urlSegments[$controllerUrlIndex] == '/') {
                 $defaultControllerFullName = $this->configProviderContract->get('defaults.controller');
                 $defaultControllerFullClassNameSplitted = preg_split("/\\\/", $defaultControllerFullName, null, PREG_SPLIT_NO_EMPTY);
                 $controllerClassName = end($defaultControllerFullClassNameSplitted);
@@ -38,21 +42,35 @@ trait MatchesRoutes
             // Else - get the specified controller from the url.
             else {
                 // check if the user is calling a areas route
-                if (array_key_exists($this->urlSegments[0], $this->areas))
+                if (array_key_exists($this->urlSegments[$controllerUrlIndex], $this->areas))
                 {
-                    echo "this is area route";
+                    $isAreaRoute = true;
+                    $controllerUrlIndex = 1;
+                    $actionUrlIndex = 2;
                 }
 
-                $controllerClassName = ucfirst($this->urlSegments[0]) . 'Controller';
-                $controllerFullName = $this->configProviderContract->get('namespaces.controllers') . $controllerClassName;    
+                if (isset($this->areas[$this->urlSegments[0]]['folder'])) {
+                    $areaFolderPrefix = $this->areas[$this->urlSegments[0]]['folder'];
+                }
+
+                $defaultControllerNamespace = $isAreaRoute == false
+                    ? $this->configProviderContract->get('namespaces.controllers')
+                    : $this->configProviderContract->get('namespaces.areas') . $areaFolderPrefix . '\\Controllers\\';
+
+                $controllerClassName = $this->configProviderContract->get('defaults.controller_area');
+
+                if (isset($this->urlSegments[$controllerUrlIndex])) {
+                    $controllerClassName = ucfirst($this->urlSegments[$controllerUrlIndex]) . 'Controller';
+                }
+                $controllerFullName = $defaultControllerNamespace . $controllerClassName; 
             }
 
-            unset($this->urlSegments[0]);
+            unset($this->urlSegments[$controllerUrlIndex]);
         }
 
-        if (isset($this->urlSegments[1])) {
-            $action = $this->urlSegments[1];
-            unset($this->urlSegments[1]);
+        if (isset($this->urlSegments[$actionUrlIndex])) {
+            $action = $this->urlSegments[$actionUrlIndex];
+            unset($this->urlSegments[$actionUrlIndex]);
         }
         
         if (is_null($action)) {
@@ -63,6 +81,10 @@ trait MatchesRoutes
         // If so - false.
         if ($this->actionReservedByCustomRoute($controllerClassName, $action)) {
             return false;
+        }
+
+        if ($isAreaRoute) {
+            unset($this->urlSegments[0]);
         }
 
         $params = ! empty($this->urlSegments) ? array_values($this->urlSegments) : [];
@@ -98,7 +120,7 @@ trait MatchesRoutes
             if (method_exists($controllerObject, $action)) {
 
                 if ( ! $this->requiredParamsAreAvailable($controllerObject, $action, $params)) {
-                    throw new \Exception('THROW 404'); // TODO throw 404 here!
+                    throw new \Exception('THROW 404 - the route is not found'); // TODO throw 404 here!
                 }
 
                 $target = [

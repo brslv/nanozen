@@ -24,8 +24,6 @@ $router->get('nice', 'TestController@nice');
 // 
 $router->area('test', 'TestArea'); // forum is the area's url prefix; Forum is the area's folder.
 
-$router->forArea('test')->get('/', 'TestController@index');
-
 $router->forArea('test')->get('/abrakadabra', 'TestController@home');
 
 // When this route is available
