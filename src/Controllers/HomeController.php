@@ -3,6 +3,8 @@
 namespace Nanozen\Controllers;
 
 use Nanozen\Providers\Controller\BaseControllerProvider as BaseController;
+use Nanozen\Providers\Session\SessionProvider as Session;
+use Nanozen\Utilities\Csrf;
 
 /**
  * Class HomeController
@@ -29,6 +31,7 @@ class HomeController extends BaseController
      */
     public function welcome()
     {
+        print_r(Session::get());
         $name = 'Stranger';
 
         $this->aloha($name);
