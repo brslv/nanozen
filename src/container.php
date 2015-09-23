@@ -30,3 +30,8 @@ Injector::prepare(
 		[
 			'\Nanozen\Providers\CustomRouting\DispatchingProvider',
 		]);
+
+Injector::prepare(
+		InjectorTypes::TYPE_CLASS,
+		'viewProviderContract',
+		'\Nanozen\Providers\View\ViewProvider');

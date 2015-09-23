@@ -13,6 +13,15 @@ use Nanozen\App\Base;
 class BaseControllerProvider
 {
 
-    public $dependsOn = ['configProviderContract'];
+    public $dependsOn = ['configProviderContract', 'viewProviderContract'];
+
+    protected function view()
+    {
+    	// Sets the Views folder path.
+    	$this->viewProviderContract->setPath($this->configProviderContract->get('paths.views'));
+
+    	// Returns the viewProviderContract. 
+    	return $this->viewProviderContract;
+    }
 
 }

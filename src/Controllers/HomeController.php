@@ -16,46 +16,18 @@ use Nanozen\Utilities\Html\Form;
 class HomeController extends BaseController
 {
 
-    /**
-     * The default action.
-     * 
-     * @return void
-     */
-    public function index()
-    {
-        echo "HomeController::index.";
-    }
-
-    /**
-     * Experimenting.
-     *
-     */
     public function welcome()
     {
-        print_r(Session::get());
-        $name = 'Stranger';
+        $welcome = '<b>This is Nanozen.</b>';
 
-        $this->aloha($name);
+        // Uncomment the row below, if you want to cansel html escaping.
+        $this->view()->escape(false);
+
+        // Calls view in the folder Views/home -> welcome.php.
+        // Passes the $welcome variable to the view.
+        // There can be accessed like this:
+        // $this->welcome;
+        $this->view()->render('home.welcome', compact('welcome'));
     }
-
-    public function aloha($name)
-    {
-        echo "Aloha, " . $name . ".";
-    }
-
-    public function bye()
-    {
-        echo Form::start('index_bla.php', 'PUT');
-            echo Form::text('username', ['placeholder' => 'Username']);
-            echo Form::password('pswd', ['placeholder' => 'Password']);
-        echo Form::stop();
-
-        // echo "Bye, bye, whoever you were.";
-    }
-
-    public function automatic()
-    {
-        echo "Automatic route";
-    }
-
+    
 }
