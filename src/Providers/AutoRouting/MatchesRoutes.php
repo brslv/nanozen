@@ -79,8 +79,10 @@ trait MatchesRoutes
 
         // Check if the action is reserved by a custom route.
         // If so - false.
-        if ($this->actionReservedByCustomRoute($controllerClassName, $action)) {
-            return false;
+        if ( ! $isAreaRoute) {
+            if ($this->actionReservedByCustomRoute($controllerClassName, $action)) {
+                return false;
+            }
         }
 
         if ($isAreaRoute) {
