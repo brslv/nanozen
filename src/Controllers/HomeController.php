@@ -19,6 +19,7 @@ class HomeController extends BaseController
     public function welcome()
     {
         $welcome = 'This is Nanozen.';
+        $this->view()->slogan = '~ A journey of a thousand miles begins with a single step.';
 
         // Uncomment the row below, if you want to cansel html escaping.
         // $this->view()->escape(false);
