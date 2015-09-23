@@ -21,7 +21,7 @@ class HomeController extends BaseController
         $welcome = 'This is Nanozen.';
         $this->view()->slogan = '~ A journey of a thousand miles begins with a single step.';
 
-        // Uncomment the row below, if you want to cansel html escaping.
+        // Uncomment the row below, if you want to cancel html escaping.
         // $this->view()->escape(false);
 
         // Calls view in the folder Views/home -> welcome.php.
