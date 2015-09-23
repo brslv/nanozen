@@ -45,7 +45,12 @@ class HomeController extends BaseController
 
     public function bye()
     {
-        echo Form::check('checking', 10, null, 'Chckbox, baby!');
+        echo Form::check('checking', 10, null, 'Chckbox, baby!') . '<br />';
+        echo Form::dropdown('dropdownNameHere', [
+            'volvo' => 'Volvo',
+            'mercedes' => 'Mercedes',
+        ]);
+        
         echo "Bye, bye, whoever you were.";
     }
 
