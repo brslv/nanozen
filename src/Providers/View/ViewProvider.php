@@ -4,6 +4,7 @@ namespace Nanozen\Providers\View;
 
 use Nanozen\Contracts\Providers\View\ViewProviderContract;
 use Nanozen\App\Injector;
+use Nanozen\Utilities\Util;
 
 /**
  * Class ViewProvider
@@ -107,7 +108,7 @@ class ViewProvider implements ViewProviderContract
 	{
 		if (array_key_exists($property, $this->data)) {
 			return $this->escapeHtmlChars 
-				? htmlspecialchars($this->data[$property])
+				? Util::e($this->data[$property])
 					: $this->data[$property];
 		}
 
