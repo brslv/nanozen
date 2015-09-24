@@ -41,6 +41,8 @@ class DispatchingProvider implements DispatchingProviderContract
             $action = $target['action'];
             $params = $target['params'];
 
+            // $this->checkForBindingModel();
+
             call_user_func_array([new $controller, $action], $params);
 
             exit;

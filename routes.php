@@ -15,9 +15,9 @@
 
 // Areas:
 // This simple line activates the routing for areas.
+// 		$router->area('test', 'TestArea');
 // By default, the routing is automatic (mapping automatic controller/action/params).
 // Can be customized by:
 // 		$router->forArea('test')->get('some-route', 'SomeController@action');
-// $router->area('test', 'TestArea');
 
-$router->get('/', 'HomeController@welcome');
+$router->get('/welcome', 'HomeController@welcome');

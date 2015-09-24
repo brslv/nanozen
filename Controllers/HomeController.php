@@ -35,5 +35,10 @@ class HomeController extends BaseController
         // $this->welcome;
         $this->view()->render('home.welcome', compact('welcome'));
     }
+
+    public function index()
+    {
+        echo 'Index.';
+    }
     
 }

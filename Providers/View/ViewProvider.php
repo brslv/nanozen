@@ -21,7 +21,7 @@ class ViewProvider implements ViewProviderContract
 
 	protected $view;
 
-	protected $model = null;
+	protected $requiredObject = null;
 
 	protected $viewFullName;
 
@@ -58,9 +58,9 @@ class ViewProvider implements ViewProviderContract
 			? $this->data 
 				: array_merge($data, $this->data);
 
-		if (isset($this->model) && ! is_null($this->model)) {
-			if ( ! $this->matchModel()) {
-				throw new \Exception("Model not matching. This view requires {$this->model} type.");
+		if (isset($this->requiredObject) && ! is_null($this->requiredObject)) {
+			if ( ! $this->matchRequiredObject()) {
+				throw new \Exception("Required object not matching. This view requires {$this->requiredObject} type.");
 			}
 		}
 
@@ -82,18 +82,18 @@ class ViewProvider implements ViewProviderContract
 		return $rendered;
 	}
 
-	private function matchModel()
+	private function matchRequiredObject()
 	{
 		if (is_null($this->data) || empty($this->data)) {
-			throw new Exception("Model not matching. This view requires {$this->model} type.");
+			throw new Exception("Required object not matching. This view requires {$this->requiredObject} type.");
 		}
 
-		$model = ltrim($this->model, '\\');
+		$requiredObject = ltrim($this->requiredObject, '\\');
 
 		foreach ($this->data as $key => $value) {
 			$class = is_object($value) ? get_class($value) : false;
 
-			if ($class && $class == $model) {
+			if ($class && $class == $requiredObject) {
 				return true;
 			} 
 		}
@@ -131,13 +131,13 @@ class ViewProvider implements ViewProviderContract
 		return $this->escapeHtmlChars;
 	}
 
-	public function uses($model)
+	public function uses($requiredObject)
 	{
-		if (trim($model) == "") {
-			throw new \Exception('Invalid model.');
+		if (trim($requiredObject) == "") {
+			throw new \Exception('Invalid required object.');
 		}
 
-		$this->model = $model;
+		$this->requiredObject = $requiredObject;
 
 		return $this;
 	}
