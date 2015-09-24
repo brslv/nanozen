@@ -118,6 +118,10 @@ trait MatchesRoutes
     {
         foreach ($this->routes as $routeMethod => $route) {
             foreach ($route as $currentRoute) {
+                if (is_callable($currentRoute)) {
+                    continue;
+                }
+
                 list($currentRouteController, $currentRouteAction) = 
                     preg_split('/@/', $currentRoute, null, PREG_SPLIT_NO_EMPTY);
 
