@@ -16,13 +16,18 @@ use Nanozen\Utilities\Html\Form;
 class HomeController extends BaseController
 {
 
+    /**
+     * To set required object (static view):
+     * $this->view()->uses('\Some\Model\Example')->render('home.example', compact('exampleObject'));
+     *
+     * To set escaping to false for this view:
+     * $this->view()->escape(false); 
+     */
+
     public function welcome()
     {
         $welcome = 'This is Nanozen.';
         $this->view()->slogan = '~ A journey of a thousand miles begins with a single step.';
-
-        // Uncomment the row below, if you want to cancel html escaping.
-        // $this->view()->escape(false);
 
         // Calls view in the folder Views/home -> welcome.php.
         // Passes the $welcome variable to the view.

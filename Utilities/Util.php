@@ -19,7 +19,11 @@ class Util
 	 */
 	public static function e($something)
 	{
-		return htmlspecialchars($something, ENT_QUOTES, 'UTF-8');
+		if ( ! is_object($something)) {
+			return htmlspecialchars($something, ENT_QUOTES, 'UTF-8');
+		}
+
+		return $something;
 	}
 	
 }

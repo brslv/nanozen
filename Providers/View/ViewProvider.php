@@ -21,6 +21,8 @@ class ViewProvider implements ViewProviderContract
 
 	protected $view;
 
+	protected $model = null;
+
 	protected $viewFullName;
 
 	protected $escapeHtmlChars = true;
@@ -56,6 +58,12 @@ class ViewProvider implements ViewProviderContract
 			? $this->data 
 				: array_merge($data, $this->data);
 
+		if (isset($this->model) && ! is_null($this->model)) {
+			if ( ! $this->matchModel()) {
+				throw new \Exception("Model not matching. This view requires {$this->model} type.");
+			}
+		}
+
 		if (is_null($this->path)) {
 			$this->setDefaultPath();
 		}
@@ -72,6 +80,25 @@ class ViewProvider implements ViewProviderContract
 		}
 
 		return $rendered;
+	}
+
+	private function matchModel()
+	{
+		if (is_null($this->data) || empty($this->data)) {
+			throw new Exception("Model not matching. This view requires {$this->model} type.");
+		}
+
+		$model = ltrim($this->model, '\\');
+
+		foreach ($this->data as $key => $value) {
+			$class = is_object($value) ? get_class($value) : false;
+
+			if ($class && $class == $model) {
+				return true;
+			} 
+		}
+
+		return false;
 	}
 
 	private function setDefaultPath()
@@ -102,6 +129,17 @@ class ViewProvider implements ViewProviderContract
 		}
 
 		return $this->escapeHtmlChars;
+	}
+
+	public function uses($model)
+	{
+		if (trim($model) == "") {
+			throw new \Exception('Invalid model.');
+		}
+
+		$this->model = $model;
+
+		return $this;
 	}
 
 	public function __get($property) 
