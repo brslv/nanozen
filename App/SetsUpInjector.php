@@ -22,7 +22,7 @@ trait SetsUpInjector
 	 */
     public function setupInjector()
     {   
-    	include '../src/container.php';
+    	include '../container.php';
     }
 
 }

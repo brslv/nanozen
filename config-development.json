@@ -12,7 +12,7 @@
         "views": "Nanozen\\Views\\"
     },
     "paths": {
-    	"routes_file": "../src/routes.php",
-        "views": "../src/Views/"
+    	"routes_file": "../routes.php",
+        "views": "../Views/"
     }
 }

@@ -13,7 +13,7 @@ class ModeProvider
 
     private static $mode;
 
-    const MODE_FILE_LOCATION = '../src/mode';
+    const MODE_FILE_LOCATION = '../mode';
 
     const MODE_APP_LIVE = 'live';
 

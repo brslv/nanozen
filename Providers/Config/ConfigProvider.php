@@ -16,9 +16,9 @@ class ConfigProvider implements ConfigProviderContract
 
     protected $config;
 
-    const CONFIG_LIVE_FILE_LOCATION = '../src/config-live.json';
+    const CONFIG_LIVE_FILE_LOCATION = '../config-live.json';
 
-    const CONFIG_DEVELOPMENT_FILE_LOCATION = '../src/config-development.json';
+    const CONFIG_DEVELOPMENT_FILE_LOCATION = '../config-development.json';
 
     public function __construct()
     {

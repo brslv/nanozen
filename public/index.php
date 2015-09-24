@@ -5,4 +5,4 @@
  *
  * @author brslv
  */
-require_once '../src/bootstrap.php';
+require_once '../bootstrap.php';
