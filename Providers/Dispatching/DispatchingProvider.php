@@ -15,9 +15,17 @@ use Nanozen\Contracts\Providers\Dispatching\DispatchingProviderContract;
 class DispatchingProvider implements DispatchingProviderContract
 {
 
+    use InjectsBindingModels;
+
     public $dependsOn = ['configProviderContract', 'viewProviderContract'];
 
     private $isAreaRoute = false;
+
+    private $controller;
+
+    private $action;
+
+    private $params = [];
 
     public function dispatch($target, $variables)
     {
@@ -37,14 +45,13 @@ class DispatchingProvider implements DispatchingProviderContract
             ! empty($target) && 
             $target['type'] == 'automatic_match'
         ) {
-            $controller = $target['controller'];
-            $action = $target['action'];
-            $params = $target['params'];
+            $this->controller = Injector::call($target['controller']);
+            $this->action = $target['action'];
+            $this->params = $target['params'];
 
-            // $this->checkForBindingModel();
+            $this->injectBindingModelIfAny();
 
-            call_user_func_array([new $controller, $action], $params);
-
+            call_user_func_array([$this->controller, $this->action], $this->params);
             exit;
         }
 
@@ -55,19 +62,19 @@ class DispatchingProvider implements DispatchingProviderContract
             $target = $targetControllerAndAction;
         }
 
-        list($controller, $action) = $this->extractControllerAndActionFromTarget($target);
-        
-        $_controller = $this->configProviderContract->get('namespaces.controllers') . $controller;
+        list($this->controller, $this->action) = $this->extractControllerAndActionFromTarget($target);
+
+        $this->controller = $this->configProviderContract->get('namespaces.controllers') . $this->controller;
 
         if ($this->isAreaRoute) {
             $areasNamespace = $this->configProviderContract->get('namespaces.areas');
-            $_controller = $areasNamespace . $areaFolderPrefix . '\\Controllers\\' . $controller;
+            $this->controller = $areasNamespace . $areaFolderPrefix . '\\Controllers\\' . $this->controller;
         }
 
-        if ($this->controllerExists($_controller)) {
+        if ($this->controllerExists($this->controller)) {
             $variablesCount = count($variables);
             $actionRequiredParametersCount =
-                (new \ReflectionMethod($_controller, $action))
+                (new \ReflectionMethod($this->controller, $this->action))
                     ->getNumberOfRequiredParameters();
 
             if ($actionRequiredParametersCount > $variablesCount) {
@@ -76,9 +83,12 @@ class DispatchingProvider implements DispatchingProviderContract
 
                 throw new \Exception($message);
             }
-            if ($this->actionExists($_controller, $action)) {
-                $_controller = Injector::call($_controller);
-                call_user_func_array([$_controller, $action], $variables);
+            if ($this->actionExists($this->controller, $this->action)) {
+                $this->controller = Injector::call($this->controller);
+
+                $this->injectBindingModelIfAny();
+
+                call_user_func_array([$this->controller, $this->action], $variables);
 
                 exit;
             }

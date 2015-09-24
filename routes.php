@@ -20,4 +20,4 @@
 // Can be customized by:
 // 		$router->forArea('test')->get('some-route', 'SomeController@action');
 
-$router->get('/welcome', 'HomeController@welcome');
+$router->get('/', 'HomeController@welcome');

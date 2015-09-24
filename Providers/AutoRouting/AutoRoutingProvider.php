@@ -16,7 +16,11 @@ class AutoRoutingProvider extends RoutingProvider implements AutoRoutingProvider
 	
 	use MatchesRoutes;
 
-	public $dependsOn = ['configProviderContract', 'dispatchingProviderContract'];
+	public $dependsOn = [
+		'configProviderContract', 
+		'dispatchingProviderContract', 
+		'viewProviderContract'
+	];
 
 	public function invoke(array $customRoutes, array $areas)
 	{

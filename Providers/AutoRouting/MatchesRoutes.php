@@ -142,7 +142,7 @@ trait MatchesRoutes
             if (method_exists($controllerObject, $action)) {
 
                 if ( ! $this->requiredParamsAreAvailable($controllerObject, $action, $params)) {
-                    throw new \Exception('THROW 404 - the route is not found'); // TODO throw 404 here!
+                    $this->viewProviderContract->render('errors.404');
                 }
 
                 $target = [

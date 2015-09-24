@@ -24,21 +24,20 @@ class HomeController extends BaseController
      * $this->view()->escape(false); 
      */
 
+    /**
+     * @bind \Nanozen\Models\Binding\UserBinding
+     */
     public function welcome()
     {
         $welcome = 'This is Nanozen.';
         $this->view()->slogan = '~ A journey of a thousand miles begins with a single step.';
+        var_dump($this->binding);
 
         // Calls view in the folder Views/home -> welcome.php.
         // Passes the $welcome variable to the view.
         // There can be accessed like this:
         // $this->welcome;
         $this->view()->render('home.welcome', compact('welcome'));
-    }
-
-    public function index()
-    {
-        echo 'Index.';
     }
     
 }

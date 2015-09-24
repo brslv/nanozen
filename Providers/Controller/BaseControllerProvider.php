@@ -15,6 +15,8 @@ class BaseControllerProvider
 
     public $dependsOn = ['configProviderContract', 'viewProviderContract'];
 
+    public $binding;
+
     protected function view()
     {
     	// Sets the Views folder path.
