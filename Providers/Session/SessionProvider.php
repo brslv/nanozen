@@ -26,7 +26,7 @@ class SessionProvider implements SessionProviderContract
 			return $_SESSION;
 		}
 
-		if (isset($_SESSION[$key]))
+		if ( ! isset($_SESSION[$key]))
 		{
 			return false;
 		}

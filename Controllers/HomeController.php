@@ -39,5 +39,22 @@ class HomeController extends BaseController
         // $this->welcome;
         $this->view()->render('home.welcome', compact('welcome'));
     }
+
+    public function form()
+    {
+        echo Form::start('process', 'put');
+        echo Form::submit('submitButton');
+        echo Form::stop();
+    }
+
+    public function process()
+    {
+        echo 'processing';
+    }
+
+    public function auto()
+    {
+        echo 'automatically routed to here';
+    }
     
 }

@@ -43,6 +43,11 @@ class Form
 		return InputBuilder::build('text', $name, null, $attributes);
 	}
 
+	public static function submit($name, array $attributes = null)
+	{
+		return InputBuilder::build('submit', $name, null, $attributes);
+	}	
+
 	public static function password($name, array $attributes = null)
 	{
 		return InputBuilder::build('password', $name, null, $attributes);

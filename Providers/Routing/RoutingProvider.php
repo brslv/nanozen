@@ -11,6 +11,8 @@ namespace Nanozen\Providers\Routing;
 class RoutingProvider
 {
 
+    use \Nanozen\Providers\Dispatching\AllowedRequestMethods;
+
 	public $dependsOn = [
         'autoRoutingProviderContract',
         'dispatchingProviderContract', 
@@ -37,8 +39,6 @@ class RoutingProvider
         //      ]
         // ]
     ];
-
-    protected $allowedRequestMethods = ['get', 'post', 'patch', 'put', 'delete'];
 
     protected $patterns = [
         ':i' => '#[0-9]+#',         // represents integers

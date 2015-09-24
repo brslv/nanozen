@@ -13,7 +13,7 @@ trait GeneratesHttpMethodSignature
 
 	public static function generateHttpMethodSignature($method)
 	{
-		return static::hidden('http_method', $method);
+		return static::hidden('_method', $method);
 	}
 	
 }

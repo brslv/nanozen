@@ -21,3 +21,7 @@
 // 		$router->forArea('test')->get('some-route', 'SomeController@action');
 
 $router->get('/', 'HomeController@welcome');
+
+$router->get('/form', 'HomeController@form');
+
+$router->put('/process', 'HomeController@process');

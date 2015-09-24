@@ -4,6 +4,8 @@ namespace Nanozen\Providers\Dispatching;
 
 use Nanozen\App\Base;
 use Nanozen\App\Injector;
+use Nanozen\Utilities\Csrf;
+use Nanozen\Providers\Session\SessionProvider as Session;
 use Nanozen\Contracts\Providers\Dispatching\DispatchingProviderContract;
 
 /**
@@ -16,8 +18,12 @@ class DispatchingProvider implements DispatchingProviderContract
 {
 
     use InjectsBindingModels;
+    use AllowedRequestMethods;
 
-    public $dependsOn = ['configProviderContract', 'viewProviderContract'];
+    public $dependsOn = [
+        'configProviderContract', 
+        'viewProviderContract',
+    ];
 
     private $isAreaRoute = false;
 
@@ -29,6 +35,7 @@ class DispatchingProvider implements DispatchingProviderContract
 
     public function dispatch($target, $variables)
     {
+        $this->passThroughToken();
 
         if ( ! $target) {
             $this->throw404();
@@ -93,6 +100,26 @@ class DispatchingProvider implements DispatchingProviderContract
                 exit;
             }
         }
+    }
+
+    private function passThroughToken()
+    {
+        if (strtolower($_SERVER['REQUEST_METHOD']) == 'get') {
+            return true;
+        }
+
+        if (isset($_SERVER['REQUEST_METHOD']) && strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
+            if(isset($_POST['_method'])) {
+                if (Csrf::validate($_POST['_token'])) {
+                    return true;
+                }
+
+                http_response_code(401);
+                $this->viewProviderContract->render('errors.401');
+            } 
+        }
+
+        $this->throw404();
     }
 
     private function throw404()

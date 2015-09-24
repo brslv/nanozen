@@ -13,7 +13,7 @@ trait GeneratesCsrfTokenSignature
 
 	public static function generateCsrfTokenField()
 	{
-		return static::hidden('csrf_token', Form::csrfToken());
+		return static::hidden('_token', Form::csrfToken());
 	}
 	
 }

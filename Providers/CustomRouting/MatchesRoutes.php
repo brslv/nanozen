@@ -2,6 +2,8 @@
 
 namespace Nanozen\Providers\CustomRouting;
 
+use Nanozen\Utilities\Csrf;
+
 /**
  * Trait MatchesRoutes
  *
@@ -27,12 +29,18 @@ trait MatchesRoutes
             $isAreaRoute = true;
         }
 
-        // print_r($routesArray); die();
-
         $requestMethod = strtolower($_SERVER['REQUEST_METHOD']);
 
         if ( ! in_array($requestMethod, $this->allowedRequestMethods)) {
             throw new \Exception("HTTP method {$requestMethod} not allowed.");
+        }
+
+        if (isset($_SERVER['REQUEST_METHOD']) && strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
+            if(isset($_POST['_method'])) {
+                if (Csrf::validate($_POST['_token'])) {
+                    $requestMethod = strtolower($_POST['_method']);
+                }
+            } 
         }
 
         foreach ($routesArray[$requestMethod] as $route => $target) {
