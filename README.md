@@ -1,2 +1,2 @@
 # nanozen
-nanozen is a micro cms.
+nanozen is a php framework.
