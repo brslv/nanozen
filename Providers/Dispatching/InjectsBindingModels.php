@@ -22,7 +22,7 @@ trait InjectsBindingModels
             if (class_exists($bindingModel)) {
             	if (isset($_POST['_token']) && Csrf::validate($_POST['_token'])) {
 	                unset($_POST['_token']);
-            		$bindingModel = new $bindingModel(); // TODO: unhardcode those bitches.
+            		$bindingModel = new $bindingModel();
 	                
 	                $reflector = new \ReflectionClass($bindingModel);
 	                $classProperties = $reflector->getProperties();

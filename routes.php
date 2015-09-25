@@ -22,6 +22,8 @@
 
 $router->get('/', 'HomeController@welcome');
 
+$router->get('/db', 'HomeController@dbTesting');
+
 $router->get('/form', 'HomeController@form');
 
 $router->put('/process', 'HomeController@process');

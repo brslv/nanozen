@@ -53,9 +53,15 @@ class HomeController extends BaseController
      */
     public function process()
     {
-    	echo $this->binding->name;
-    	echo $this->binding->age;
     	echo $this->binding->getInfo();
+    }
+    
+    /**
+     * For testing the database.
+     */
+    public function dbTesting()
+    {
+    	var_dump($this->db());
     }
 
     public function auto()

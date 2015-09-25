@@ -24,14 +24,26 @@ Injector::prepare(
 		'\Nanozen\Providers\AutoRouting\AutoRoutingProvider');
 
 Injector::prepare(
+		InjectorTypes::TYPE_CLASS,
+		'viewProviderContract',
+		'\Nanozen\Providers\View\ViewProvider');
+
+Injector::prepare(
+		InjectorTypes::TYPE_SINGLETON, 
+		'databaseProviderContract', 
+		'\Nanozen\Providers\Database\DatabaseProvider',
+		[
+			'mysql',
+			'localhost',
+			'nanozen_framework',
+			'root',
+			'root',
+		]);
+
+Injector::prepare(
 		InjectorTypes::TYPE_SINGLETON,
 		'customRoutingProviderContract',
 		'\Nanozen\Providers\CustomRouting\CustomRoutingProvider',
 		[
-			'\Nanozen\Providers\CustomRouting\DispatchingProvider',
+				'\Nanozen\Providers\CustomRouting\DispatchingProvider',
 		]);
-
-Injector::prepare(
-		InjectorTypes::TYPE_CLASS,
-		'viewProviderContract',
-		'\Nanozen\Providers\View\ViewProvider');

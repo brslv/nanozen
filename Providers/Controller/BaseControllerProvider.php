@@ -13,7 +13,11 @@ use Nanozen\App\Base;
 class BaseControllerProvider
 {
 
-    public $dependsOn = ['configProviderContract', 'viewProviderContract'];
+    public $dependsOn = [
+    	'configProviderContract', 
+    	'viewProviderContract',
+    	'databaseProviderContract',
+    ];
 
     public $binding;
 
@@ -24,6 +28,11 @@ class BaseControllerProvider
 
     	// Returns the viewProviderContract. 
     	return $this->viewProviderContract;
+    }
+    
+    protected function db() 
+    {
+		return $this->databaseProviderContract;    	
     }
 
 }
