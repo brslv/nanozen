@@ -61,7 +61,12 @@ class HomeController extends BaseController
      */
     public function dbTesting()
     {
-    	var_dump($this->db());
+    	$someRandomUsersFromDb = 
+    		$this->db()->query('SELECT * FROM users')->fetch();
+    	
+    	foreach ($someRandomUsersFromDb as $user) {
+    		echo $user->username . '<br />';
+    	}
     }
 
     public function auto()
