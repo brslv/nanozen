@@ -12,10 +12,9 @@ class UserBinding
 {
 	public $name;
 	public $age;
-
-	public function __construct($name, $age) 
+	
+	public function getInfo()
 	{
-		$this->name = $name;
-		$this->age = $age;
+		return $this->name . ' ' . $this->age;
 	}
 }

@@ -2,6 +2,7 @@
 
 namespace Nanozen\Providers\Dispatching;
 
+use Nanozen\Utilities\Csrf;
 /**
  * Trait InjectsBindingModels
  *
@@ -19,13 +20,53 @@ trait InjectsBindingModels
 
         if ($bindingModel) {
             if (class_exists($bindingModel)) {
-                $bindingModel = new $bindingModel('Ivan', 23); // TODO: unhardcode those bitches.
+            	if (isset($_POST['_token']) && Csrf::validate($_POST['_token'])) {
+	                unset($_POST['_token']);
+            		$bindingModel = new $bindingModel(); // TODO: unhardcode those bitches.
+	                
+	                $reflector = new \ReflectionClass($bindingModel);
+	                $classProperties = $reflector->getProperties();
+	                
+	                if ( ! $this->isPassedDataValid($classProperties)) {
+	                	throw new \Exception("Binding model cannot be processed with the data you passed.");
+	                }
+	                
+	                foreach ($classProperties as $property) {
+	                	$propertyName = $property->getName();
+	                	
+	                	$bindingModel->{$propertyName} = $_POST[$propertyName];
+	                }
+            	}
             } else {
                 throw new \Exception("The provided binding model does not exist: {$bindingModel}");
             }
         }
 
         $this->controller->binding = $bindingModel;
+    }
+    
+    private function isPassedDataValid($classProperties)
+    {
+    	$propertyNamesList = [];
+    	$matched = [];
+    	
+    	foreach ($classProperties as $property) {
+    		$propertyNamesList[] = $property->getName();
+    	}
+    	
+    	foreach ($propertyNamesList as $property) {
+    		foreach ($_POST as $post => $value) {
+    			if ($property == $post) {
+    				$matched[] = $property;
+    			}
+    		}
+    	}
+    	
+    	if (count($propertyNamesList) == count($matched)) {
+    		return true;
+    	}
+    	
+    	return false;
     }
 
     private function getBindingModelIfAny()

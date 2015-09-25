@@ -35,7 +35,7 @@ class DispatchingProvider implements DispatchingProviderContract
 
     public function dispatch($target, $variables)
     {
-        $this->passThroughToken();
+        $this->validateToken();
 
         if ( ! $target) {
             $this->throw404();
@@ -102,14 +102,17 @@ class DispatchingProvider implements DispatchingProviderContract
         }
     }
 
-    private function passThroughToken()
+    private function validateToken()
     {
+    	
         if (strtolower($_SERVER['REQUEST_METHOD']) == 'get') {
             return true;
-        }
-
-        if (isset($_SERVER['REQUEST_METHOD']) && strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
+        } else {
             if(isset($_POST['_method'])) {
+            	if ( ! isset($_POST['_token'])) {
+            		$this->viewProviderContract->render('errors.401');
+            	}
+            	
                 if (Csrf::validate($_POST['_token'])) {
                     return true;
                 }
@@ -119,6 +122,7 @@ class DispatchingProvider implements DispatchingProviderContract
             } 
         }
 
+        
         $this->throw404();
     }
 

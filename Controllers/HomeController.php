@@ -24,14 +24,10 @@ class HomeController extends BaseController
      * $this->view()->escape(false); 
      */
 
-    /**
-     * @bind \Nanozen\Models\Binding\UserBinding
-     */
     public function welcome()
     {
         $welcome = 'This is Nanozen.';
         $this->view()->slogan = '~ A journey of a thousand miles begins with a single step.';
-        var_dump($this->binding);
 
         // Calls view in the folder Views/home -> welcome.php.
         // Passes the $welcome variable to the view.
@@ -40,16 +36,26 @@ class HomeController extends BaseController
         $this->view()->render('home.welcome', compact('welcome'));
     }
 
+    /**
+     * Submits a form to HomeController::process.
+     */
     public function form()
     {
-        echo Form::start('process', 'put');
+    	echo Form::start('process', 'put');
+        echo Form::text('name');
+        echo Form::text('age');
         echo Form::submit('submitButton');
         echo Form::stop();
     }
-
+	
+    /**
+     * @bind \Nanozen\Models\Binding\UserBinding
+     */
     public function process()
     {
-        echo 'processing';
+    	echo $this->binding->name;
+    	echo $this->binding->age;
+    	echo $this->binding->getInfo();
     }
 
     public function auto()

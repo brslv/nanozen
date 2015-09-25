@@ -34,9 +34,14 @@ trait MatchesRoutes
         if ( ! in_array($requestMethod, $this->allowedRequestMethods)) {
             throw new \Exception("HTTP method {$requestMethod} not allowed.");
         }
-
-        if (isset($_SERVER['REQUEST_METHOD']) && strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
+	
+        // Token check
+        if ($requestMethod != 'get') {
             if(isset($_POST['_method'])) {
+            	if ( ! isset($_POST['_token'])) {
+            		$this->viewProviderContract->render('errors.401');
+            	}
+            	
                 if (Csrf::validate($_POST['_token'])) {
                     $requestMethod = strtolower($_POST['_method']);
                 }
