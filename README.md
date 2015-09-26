@@ -5,7 +5,7 @@ It's not fully functional and may have some bugs, but it has the core components
 
 * Default and custom routing;
 * Areas (Bundles);
-* Model binging;
+* Model binding;
 * Strongly typed views;
 * Database abstraction layer;
 * Various view-helpers;
@@ -220,6 +220,48 @@ And did you noticed the **InjectorTypes::TYPE_SINGLETON** thing? It's the type o
 * InjectorTypes::TYPE_SINGLETON - returns the same object.
 
 That's it.
+
+### Binding models
+
+Binded model is a convinient way to tell a controller to expect a specific kind of Binded model object, which has information packaged from a POST request.
+
+Here's how to use the built in binding functionality of nanozen:
+
+```php
+// UsersController.php
+
+/**
+* @bind \Nanozen\Models\Binding\UserBinding
+*/
+public function login()
+{
+	$username = $this->binding->username;
+	$email = $this->binding->email;
+	
+	// ... other logic ...
+}
+```
+
+```php
+// This is how the exact binding model looks like.
+
+<?php
+
+namespace Nanozen\Models\Binding;
+
+class UserBinding
+{
+	public $username;
+	
+	public $email;
+}
+```
+
+In the example above, we specify what binding model the method should expect, using DocBlock syntax keyword @bind and the full name of the model.
+
+When a user sumbits a HTTP POST request to this action, it will already have the information from the request, serialized to the specified binding model. 
+
+One can use the serialized model, using the **$this->binding** object.
 
 ### Views
 ---
