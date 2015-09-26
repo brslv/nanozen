@@ -61,17 +61,12 @@ class HomeController extends BaseController
      */
     public function dbTesting()
     {
-		$someRandomUsersFromDb = $this->db()->prepare("SELECT * FROM users WHERE username = :username");
-		$someRandomUsersFromDb->execute([':username' => 'Joro']);
+		$someRandomUsersFromDb = $this->db()->prepare("SELECT * FROM users WHERE password = :password");
+		$someRandomUsersFromDb->execute([':password' => '123']);
 		
-		$result = $someRandomUsersFromDb->fetch();
-
-//     	$someRandomUsersFromDb = 
-//     		$this->db()->query('SELECT * FROM users')->fetch();
-    	
-    	foreach ($result as $user) {
-    		echo $user->username . '<br />';
-    	}
+		$user = $someRandomUsersFromDb->fetch();
+		
+		$this->view()->render('home.dbTesting', compact('user'));
     }
 
     public function auto()
