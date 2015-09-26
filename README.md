@@ -187,7 +187,7 @@ public function show($id)
 
 #### Setting up the database credentials
 
-By default the database layer uses the MySQL driver. You can setup (**as of now the framework only ships with MySQL support**). The configurations can be customized in the continer.php file, which we will discuss now.
+By default the database layer uses the MySQL driver. ~You can change the driver~ (**as of now the framework only ships with MySQL support**). The configurations can be customized in the continer.php file, which we will discuss now.
 
 ### Container (IoC)
 ---
@@ -277,9 +277,9 @@ public function testStrongView()
 	$getUserFromDb = $this->db()->prepare("SELECT * FROM users WHERE username = :username");
 	$getUserFromDb->execute([':username' => 'John']);
 	
-	$dbUser = $someRandomUsersFromDb->fetch()[0]; // The view will throw exception if you pass it this object
+	$dbUser = $getUserFromDb->fetch()[0]; // The view will throw exception if you pass it this object
 	
-	$user = new \Nanozen\Models\User(); // The view will works with this object.
+	$user = new \Nanozen\Models\User(); // The view will work with this object.
 	$user->username = $dbUser->username;
 	$user->password = $dbUser->password;
 	

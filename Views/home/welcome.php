@@ -31,6 +31,7 @@
 		</h1>
 
 		<h4><?= $this->slogan; ?></h4>
+		<p><a href="https://github.com/brslv/nanozen">Github</a></p>
 	</div>
 
 </body>
