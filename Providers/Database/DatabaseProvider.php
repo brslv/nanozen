@@ -33,12 +33,22 @@ class DatabaseProvider implements DatabaseProviderContract
 	
 	public function prepare($statement, array $options = []) 
 	{
+		if (trim($statement) == "" || empty($statement)) {
+			throw new \Exception("Statement cannot be empty.");
+		}
 		
+		$this->query = $this->handler->prepare($statement);
+		
+		return $this;
 	}
 	
 	public function execute(array $parameters = [])
 	{
+		if (is_null($this->query)) {
+			throw new \Exception('Cannot invoke execute. Try using query or prepare/execute before fetch.');
+		}
 		
+		return $this->query->execute($parameters);
 	}
 	
 	public function fetch($fetchStyle = null, $all = true)
