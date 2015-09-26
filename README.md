@@ -269,6 +269,24 @@ public function list()
 
 It's a convinient way to make sure the view will work only with a specific type of object. Mainly used to make a view to work with a specific type of model (e.g. Nanozen\Models\User).
 
+Let's look at a simple example:
+
+```php
+public function testStrongView()
+{
+	$getUserFromDb = $this->db()->prepare("SELECT * FROM users WHERE username = :username");
+	$getUserFromDb->execute([':username' => 'John']);
+	
+	$dbUser = $someRandomUsersFromDb->fetch()[0]; // The view will throw exception if you pass it this object
+	
+	$user = new \Nanozen\Models\User(); // The view will works with this object.
+	$user->username = $dbUser->username;
+	$user->password = $dbUser->password;
+	
+	$this->view()->uses('Nanozen\Models\User')->render('home.testStrongView', compact('user'));
+}
+```
+
 ### View helpers
 ---
 

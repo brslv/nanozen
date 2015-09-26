@@ -11,6 +11,8 @@ namespace Nanozen\Models;
 class User 
 {
 
-	// 
+	public $username;
+	
+	public $password;
 
 }

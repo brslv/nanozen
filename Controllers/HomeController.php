@@ -17,13 +17,9 @@ class HomeController extends BaseController
 {
 
     /**
-     * To set required object (static view):
-     * $this->view()->uses('\Some\Model\Example')->render('home.example', compact('exampleObject'));
-     *
-     * To set escaping to false for this view:
-     * $this->view()->escape(false); 
+     * This view is here just to test
+     * rendering views.
      */
-
     public function welcome()
     {
         $welcome = 'This is Nanozen.';
@@ -37,7 +33,8 @@ class HomeController extends BaseController
     }
 
     /**
-     * Submits a form to HomeController::process.
+     * This view is here just to test
+     * the form building functionality.
      */
     public function form()
     {
@@ -49,6 +46,9 @@ class HomeController extends BaseController
     }
 	
     /**
+     * This view is here just to test
+     * the model-binding functionality.
+     * 
      * @bind \Nanozen\Models\Binding\UserBinding
      */
     public function process()
@@ -57,18 +57,31 @@ class HomeController extends BaseController
     }
     
     /**
-     * For testing the database.
+     * This action is here just to test
+     * the database and the strongly-typed
+     * views functionality.
      */
-    public function dbTesting()
+    public function testsStrongView()
     {
 		$someRandomUsersFromDb = $this->db()->prepare("SELECT * FROM users WHERE password = :password");
 		$someRandomUsersFromDb->execute([':password' => '123']);
 		
-		$user = $someRandomUsersFromDb->fetch();
+		// doesn't work with this object.
+		$dbUser = $someRandomUsersFromDb->fetch()[0];
 		
-		$this->view()->render('home.dbTesting', compact('user'));
+		// Works with this object.
+		$user = new \Nanozen\Models\User();
+		$user->username = $dbUser->username;
+		$user->password = $dbUser->password;
+		
+		$this->view()->uses('Nanozen\Models\User')->render('home.testsStrongView', compact('user'));
     }
 
+    /**
+     * This action is here just to test
+     * the automatic route matching functionality
+     * of the framework.
+     */
     public function auto()
     {
         echo 'automatically routed to here';
