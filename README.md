@@ -222,6 +222,7 @@ And did you noticed the **InjectorTypes::TYPE_SINGLETON** thing? It's the type o
 That's it.
 
 ### Views
+---
 
 The views in Nanozen are simple php files, which are provided with data to display (as in almost other framework available). The provider is the controller. So, every controller in the app (which extends BaseControllerProvider or BaseAreasControllerProvider, if it's in an area), has acces to the view() method, which is a convinient way to pass a **Nanozen\Providers\View\ViewProvider** object.
 
@@ -267,3 +268,65 @@ public function list()
 ```
 
 It's a convinient way to make sure the view will work only with a specific type of object. Mainly used to make a view to work with a specific type of model (e.g. Nanozen\Models\User).
+
+### View helpers
+---
+
+The nanozen framework provides the user with a nice and elegant way to construct html objects. For the purpose a developer must use the **Form** class. You can use the following methods:
+
+* start
+* stop
+* radio
+* checkbox
+* text
+* submit
+* password
+* dropdown
+* textarea
+* csrfToken (a wrapper for Csrf::generate())
+
+E.g:
+
+```php
+// Views/login.php
+echo Form::start('/login', 'POST');
+
+	echo Form::text('username', ['class' => 'form-control']);
+	echo Form::password('password', ['class' => 'form-control']);
+	echo Form::submit('loginButton', ['class' => 'btn btn-success']);
+
+echo Form::stop();
+```
+
+The code above creates:
+
+```html
+<form action="/login" method="POST">
+	<input type="text" name="username" class="form-control" />
+	<input type="password" name="password" class="form-control" />
+	<input type="submit" name="loginButton" class="btn btn-success" />
+</form>
+```
+
+Other methods:
+
+```php
+Form::radio($name, $value, array $attributes = null);
+```
+
+```php
+Form::checkbox($name, $value, array $attributes = null);
+```
+
+```php
+// Form::dropdown('cars', ['Mercedes' => 'Benz', 'Carrera' => 'Porche']);
+Form::dropdown($name, array $options, array $attributes = null);
+```
+
+```php
+Form::textarea($name, array $attributes = null);
+```
+
+```php
+Form::csrfToken();
+```
