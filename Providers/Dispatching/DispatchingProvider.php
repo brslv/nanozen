@@ -75,7 +75,8 @@ class DispatchingProvider implements DispatchingProviderContract
 
         if ($this->isAreaRoute) {
             $areasNamespace = $this->configProviderContract->get('namespaces.areas');
-            $this->controller = $areasNamespace . $areaFolderPrefix . '\\Controllers\\' . $this->controller;
+            $this->controller = explode('\\', $this->controller);
+            $this->controller = $areasNamespace . $areaFolderPrefix . '\\Controllers\\' . end($this->controller);
         }
 
         if ($this->controllerExists($this->controller)) {

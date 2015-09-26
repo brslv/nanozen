@@ -24,7 +24,7 @@ trait MatchesRoutes
         $routesArray = $this->routes;
         $isAreaRoute = false;
         
-        if (array_key_exists($this->urlSegments[0], $this->areas)) { // TODO: extract in method areaExists($area);
+        if ($this->areaExists()) {
             $routesArray = $this->areas[$this->urlSegments[0]]['routes'];
             $isAreaRoute = true;
         }
@@ -57,7 +57,7 @@ trait MatchesRoutes
                 : preg_split('#/#', $route, null, PREG_SPLIT_NO_EMPTY);
             $urlSegmentsCount = count($this->urlSegments);
             $routeSegmentsCount = count($routeSegments);
-
+            
             $routeMatches = true;
 
             // try with || $urlSegments > $routeSegments + 1
@@ -160,6 +160,11 @@ trait MatchesRoutes
         return false;
     }
 
+    private function areaExists()
+    {
+    	return array_key_exists($this->urlSegments[0], $this->areas);
+    }
+    
     public function isRouteSegmentParameter($routeSegment)
     {
         return substr($routeSegment, 0, 1) == '{' && substr($routeSegment, -1) == '}';

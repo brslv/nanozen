@@ -27,3 +27,7 @@ $router->get('/db', 'HomeController@dbTesting');
 $router->get('/form', 'HomeController@form');
 
 $router->put('/process', 'HomeController@process');
+
+$router->area('test', 'TestArea');
+
+$router->forArea('test')->get('something', 'HomeController@test');

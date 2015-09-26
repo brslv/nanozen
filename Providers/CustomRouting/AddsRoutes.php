@@ -87,8 +87,6 @@ trait AddsRoutes
 
         $this->routes['delete'][$route] = $target;
     }
-
-    // Areas - TODO: refactor
     
     public function area($routePrefix, $areaFolder) 
     {

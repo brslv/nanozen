@@ -2,7 +2,7 @@
 
 namespace Nanozen\Areas\TestArea\Controllers;
 
-use Nanozen\Providers\Controller\BaseControllerProvider as BaseController;
+use Nanozen\Areas\TestArea\Controllers\BaseControllerTestArea;
 
 /**
  * Class HomeController
@@ -10,7 +10,7 @@ use Nanozen\Providers\Controller\BaseControllerProvider as BaseController;
  * @author brslv
  * @package Nanozen\Areas\TestArea\Controllers
  */
-class HomeController extends BaseController 
+class HomeController extends BaseControllerTestArea
 {
 
 	public function index()
@@ -21,6 +21,11 @@ class HomeController extends BaseController
 	public function welcome()
 	{
 		echo "Welcome to the TestArea's HomeController::welcome().";
+	}
+	
+	public function test()
+	{
+		$this->view()->render('home.bye');
 	}
 
 }

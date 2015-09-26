@@ -11,7 +11,7 @@ use Nanozen\Providers\Database\DatabaseProvider;
  * @author brslv
  * @package Nanozen\Providers\Controller
  */
-class BaseControllerProvider
+class BaseControllerProvider extends ControllerAbstract
 {
 
     public $dependsOn = [
