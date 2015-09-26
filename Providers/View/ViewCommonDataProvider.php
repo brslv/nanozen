@@ -20,7 +20,7 @@ class ViewCommonDataProvider
 	public function getCommonData()
 	{
 		// Invoke your methods bellow:
-		$this->users();
+		// e.g: $this->users();
 		
 		// Return logic, nothing fancy, leave it as is:
 		if (is_null($this->commonData)) {
