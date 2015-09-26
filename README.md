@@ -187,7 +187,7 @@ public function show($id)
 
 #### Setting up the database credentials
 
-By default the database layer uses the MySQL driver. ~You can change the driver~ (**as of now the framework only ships with MySQL support**). The configurations can be customized in the continer.php file, which we will discuss now.
+By default the database layer uses the MySQL driver. ~~You can change the driver~~ (**as of now the framework only ships with MySQL support**). The configurations can be customized in the continer.php file, which we will discuss now.
 
 ### Container (IoC)
 ---
