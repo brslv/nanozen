@@ -8,11 +8,16 @@ It's not fully functional and may have some bugs, but it has the core components
 * Model binging;
 * Strongly typed views;
 * Database abstraction layer;
+* Various view-helpers;
+* Out of the box html escaping;
+* CSRF protection;
+* 'Homemade' IoC container;
 * More...
 
 ## Documentation
 
 ### Routing
+---
 
 #### Default routing
 The framework has a default routing mechanism, following the pattern.
@@ -100,6 +105,8 @@ $router->forArea('forum')->get('/', 'HomeController@welcome');
 ```
 
 ### Areas
+---
+
 Areas, as we said above, are kind of bundles for a specific functionality for your app - such as a forum. It's like an app in the app. 
 
 Areas have their own controllers, views and models. 
@@ -108,14 +115,18 @@ Areas have their own controllers, views and models.
 There's nothing magical.You make a folder in the framework's Areas folder. Let's say we want to make a gallery area. So we make a Gallery folder in Areas. Now:
 
 *Make Controllers folder.* 
-To use all the functionalities the framework provides you with, you should wrap yourself the BaseAreasControllerProvider in your custom BaseController.
+To use all the functionalities the framework provides you with, you should wrap yourself the BaseAreasControllerProvider in your custom BaseAreaController.
 
 Do the following:
 
 ```php
 <?php
 
-class GalleryBaseController extends BaseAreasControllerProvider
+namespace Nanozen\Areas\TestArea\Controllers;
+
+use Nanozen\Providers\Controller\BaseAreaControllerProvider;
+
+class BaseGalleryController extends BaseAreasControllerProvider
 {
 	protected $viewsPathForThisArea = '../Areas/Gallery/Views/';
 	
@@ -127,7 +138,7 @@ class GalleryBaseController extends BaseAreasControllerProvider
 	}
 }
 ```
-The code above creates a base controller for your area/module/bundle/whatever-you-call-it, which should be extended by every other controller in your custom area. Here you instruct all your area controllers to use '../Areas/Gallery/Views/'. That's it. Now each new controller, extending this base wrapper class, has the ability to call views, to use database and all the flavour the framework provides you with.
+The code above creates a base controller for your area/module/bundle/whatever-you-call-it, which should be extended by **every other controller in your custom area**. Here you instruct all your area controllers to use '../Areas/Gallery/Views/' as a reference, when it needs to call a view. That's it. Now each new controller, extending this base wrapper class, has the ability to call views, to use database and all the flavour the framework provides you with.
 
 *Make Models folder*
 Here you will manage your area's models.
@@ -144,3 +155,115 @@ $router->area('forum', 'Forum');
 ```
 #### Routing an area
 You can read more about routing for a custom area in the **Routing** section above.
+
+### Database layer
+---
+
+#### Usage
+
+The nanozen's database abstraction layer is a simple wrapper object for the PDO. It has the most essential methods one may need
+
+* query
+* prepare
+* execute
+* fetch
+
+You use it much like the PDO. E.g:
+
+```php
+// UsersController.php
+public function show($id) 
+{
+	// Each controller has a db(), which is a handler for the framework's database object.
+	$stmt = $this->db()->prepare("SELECT username, first_name, last_name, email FROM users WHERE id = :id");
+	$stmt->execute([
+		':id' => $id,
+	]);
+	$user = $stmt->fetch(); // uses PDO::FETCH_OBJ and PDO::fetchAll() method.
+	
+	$this->view()->render('users.show', compact($user));
+}
+```
+
+#### Setting up the database credentials
+
+By default the database layer uses the MySQL driver. You can setup (**as of now the framework only ships with MySQL support**). The configurations can be customized in the continer.php file, which we will discuss now.
+
+### Container (IoC)
+---
+
+The framework uses a custom made IoC container, for managing dependencies. It's very easy to use. Just open up the container.php file (in the root directory) and prepare some dependencies. Let's take a look at a simple example:
+
+```php
+Injector::prepare(
+		InjectorTypes::TYPE_CLASS, 						// Prepare class
+		'configProviderContract',  						// which corresponds to the following contract
+		'\Nanozen\Providers\Config\ConfigProvider');	// and return an object of this particular type (ConfigProvider).
+```
+But if a class has dependencies, you can declare it like this:
+
+```php
+Injector::prepare(
+		InjectorTypes::TYPE_SINGLETON,
+		'customRoutingProviderContract',
+		'\Nanozen\Providers\CustomRouting\CustomRoutingProvider',
+		[
+				'\Nanozen\Providers\CustomRouting\DispatchingProvider',
+		]);
+```
+In a simple array object, you can list the classes this object needs in order to be constructed and returned.
+
+And did you noticed the **InjectorTypes::TYPE_SINGLETON** thing? It's the type of object we call the IoC to return. There are three types:
+
+* InjectorTypes::TYPE_VALUE - returns a simple value.
+* InjectorTypes::TYPE_CLASS - returns a new object every time.
+* InjectorTypes::TYPE_SINGLETON - returns the same object.
+
+That's it.
+
+### Views
+
+The views in Nanozen are simple php files, which are provided with data to display (as in almost other framework available). The provider is the controller. So, every controller in the app (which extends BaseControllerProvider or BaseAreasControllerProvider, if it's in an area), has acces to the view() method, which is a convinient way to pass a **Nanozen\Providers\View\ViewProvider** object.
+
+But what we can to with it?
+
+#### Rendering
+
+```php
+// UsersController.php
+public function list()
+{
+	$users = $this->db()->query("SELECT * FROM users");
+	
+	$this->view()->render('home.lsit', compact('users'));	
+}
+```
+The code above will render a view file, called *list.php*, located in *Views/home directory*. The view file (*list.php*) will have access to a **$this->users** variable, holding all the users information.
+
+#### Escaping
+
+Each view is rendered with html special characters escaping out of the box. This can be turned off with a simple setting (for each action):
+
+```php
+// HomeController.php
+public function list()
+{
+	$usrs = $this->db()->query("SELECT * FROM users");
+	
+	$this->view()->escape(false); // turn off the escaping of html characters for this action.
+	$this->view()->render('home.list', compact('users'));
+}
+```
+
+#### View required objects (strongly-typed views)
+
+You can specify that a view uses a specific type of object like this:
+
+```php
+public function list()
+{
+	$this->view()->uses('\Some\Model\Example')->render('home.example', compact('exampleObject'));
+}
+```
+
+It's a convinient way to make sure the view will work only with a specific type of object. Mainly used to make a view to work with a specific type of model (e.g. Nanozen\Models\User).
