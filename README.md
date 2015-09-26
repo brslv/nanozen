@@ -22,10 +22,10 @@ The framework has a default routing mechanism, following the pattern.
 #### Custom routing
 Nanozen also provides the user with a way to specify custom routes. This can be done directly from the **routes** file in the route directory.
 
-Here's a custom route, responding to a HTTP GET request on */hi* to the HomeController::welcome() method:
+Here's a custom route, responding to a HTTP GET request on */hi*, using the HomeController::welcome() method:
 
 ```php
-$router->get('/hi', 'HomeController@hi');
+$router->get('/hi', 'HomeController@welcome');
 ```
 You can also use parameters. Here's how:
 
@@ -69,4 +69,32 @@ The framework provides the user with ability to pass optional parameters, by sim
 
 ```php
 $router->get('/users/{name:s?}') // name is optional here
+```
+
+#### Routing for areas
+Areas are a nice way to group up certain components for your application. E.g. a forum component can be bundled in a custom area. We discuss areas bellow. Now, let's look at how to route them:
+
+*Initializin area*
+First, you should tell your app that it has an area, that is ready to be seen by the world. Do it like this:
+
+```php
+// in routes.php
+$router->area('forum', 'Forum');
+```
+The first argument is the name of the route prefix. The second is the name of the folder the area is located. In our case it's the *Forum* folder inside the app's *Areas* folder.
+
+*Default routing for areas*
+Areas come with default routing. That said, an area, called *forum*, has a prefix of forum in the url. So, the HomeController::welcome() method in the forum area is dispatched automatically on the following uri:
+
+> http://your-cool-app.com/forum/home/welcome
+
+*Custom routing for areas*
+Area routes can be customized, too. Let's say you want the HomeController::welcome() action to respond on the uri:
+
+> http://your-cool-app.com/forum/hi
+
+To do this, go to the app's routes file and make a route for this area:
+
+```php
+$router->forArea('forum')->get('/', 'HomeController@welcome');
 ```
