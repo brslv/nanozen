@@ -14,8 +14,14 @@ use Nanozen\Providers\Database\Drivers\DatabaseFactory;
 class DatabaseProvider implements DatabaseProviderContract 
 {
 	
+	/**
+	 * @var \PDO
+	 */
 	protected $handler;
 	
+	/**
+	 * @var \PDOStatement
+	 */
 	protected $query;
 	
 	public function __construct($driver, $host, $dbName, $dbUser, $dbPassword, $options = null)
@@ -24,6 +30,10 @@ class DatabaseProvider implements DatabaseProviderContract
 		$this->handler = new \PDO($dsn, $dbUser, $dbPassword, $options);
 	}
 	
+	/**
+	 * @see \Nanozen\Contracts\Providers\Database\DatabaseProviderContract::query()
+	 * @return \Nanozen\Providers\Database\DatabaseProvider
+	 */
 	public function query($query)
 	{
 		$this->query = $this->handler->query($query);
@@ -31,6 +41,10 @@ class DatabaseProvider implements DatabaseProviderContract
 		return $this;
 	}
 	
+	/**
+	 * @see \Nanozen\Contracts\Providers\Database\DatabaseProviderContract::prepare()
+	 * @return \Nanozen\Providers\Database\DatabaseProvider
+	 */
 	public function prepare($statement, array $options = []) 
 	{
 		if (trim($statement) == "" || empty($statement)) {
@@ -42,6 +56,10 @@ class DatabaseProvider implements DatabaseProviderContract
 		return $this;
 	}
 	
+	/**
+	 * @see \Nanozen\Contracts\Providers\Database\DatabaseProviderContract::execute()
+	 * @return boolean
+	 */
 	public function execute(array $parameters = [])
 	{
 		if (is_null($this->query)) {

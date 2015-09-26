@@ -3,6 +3,7 @@
 namespace Nanozen\Providers\Controller;
 
 use Nanozen\App\Base;
+use Nanozen\Providers\Database\DatabaseProvider;
 
 /**
  * Class BaseControllerProvider
@@ -21,6 +22,9 @@ class BaseControllerProvider
 
     public $binding;
 
+    /**
+     * @return Nanozen\Providers\View
+     */
     protected function view()
     {
     	// Sets the Views folder path.
@@ -30,6 +34,9 @@ class BaseControllerProvider
     	return $this->viewProviderContract;
     }
     
+    /**
+     * @return \Nanozen\Providers\Database\DatabaseProvider
+     */
     protected function db() 
     {
 		return $this->databaseProviderContract;    	
