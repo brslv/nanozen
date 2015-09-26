@@ -281,7 +281,7 @@ public function list()
 	$this->view()->render('home.lsit', compact('users'));	
 }
 ```
-The code above will render a view file, called *list.php*, located in *Views/home directory*. The view file (*list.php*) will have access to a **$this->users** variable, holding all the users information.
+The code above will render a view file, called *list.php*, located in *Views/home directory*. The view file (*list.php*) will have access to a **$users** variable, holding all the users information.
 
 #### Escaping
 
@@ -326,6 +326,40 @@ public function testStrongView()
 	$user->password = $dbUser->password;
 	
 	$this->view()->uses('Nanozen\Models\User')->render('home.testStrongView', compact('user'));
+}
+```
+
+#### Common data
+
+There might be times, when you need to pass the same data to all views. Think of a sidebar, or menus. But writing the same code in every controller is a pain in the ...
+
+So, nanozen has a dedicated place for that. Meet the **ViewCommonDataProvider** class. It's located in **Providers/View**. The goal is to fill the *$commonData* array there. The process is simple. Two steps:
+
+* Make a method that fills the $commonData array with some information. Say you need all the users' information in every controller (which is a silly thing, but for the sake of simplicity). You make a method, called users(), for example. *It gets all the users from the database as array of objects and puts it in the $commonData array*.
+
+```php
+public function users()
+{
+	$users = $this->db()->query("SELECT * FROM users")->fetch();
+	
+	$this->commonData['usersFromDb'] = $users; // in each controller you'll have a $usersFromDb variable
+}
+```
+
+* Now, call your method in the **getCommonData()** method. That's it. You can use the newly fetched information in every possible controller. Congrats!
+
+```php
+public function getCommonData()
+{
+	// Invoke yout methods bellow:
+	$this->users();
+	
+	// Return logic, nothing fancy, leave it as is:
+	if (is_null($this->commonData)) {
+		return [];
+	}
+	
+	return $this->commonData;
 }
 ```
 

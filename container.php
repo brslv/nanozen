@@ -27,6 +27,16 @@ Injector::prepare(
 		InjectorTypes::TYPE_CLASS,
 		'viewProviderContract',
 		'\Nanozen\Providers\View\ViewProvider');
+		
+Injector::prepare(
+		InjectorTypes::TYPE_CLASS,
+		'commonDataInjector',
+		'\Nanozen\Providers\View\CommonDataInjector');
+		
+Injector::prepare(
+		InjectorTypes::TYPE_SINGLETON,
+		'viewCommonDataProviderContract',
+		'\Nanozen\Providers\View\ViewCommonDataProvider');
 
 Injector::prepare(
 		InjectorTypes::TYPE_SINGLETON, 

@@ -15,6 +15,8 @@ use Nanozen\Utilities\Util;
 class ViewProvider implements ViewProviderContract 
 {
 
+	public $dependsOn = ['viewCommonDataProviderContract'];
+	
 	protected $data = [];
 
 	protected $path;
@@ -56,7 +58,9 @@ class ViewProvider implements ViewProviderContract
 		$this->view = $view;
 		$this->data = is_null($data) 
 			? $this->data 
-				: array_merge($data, $this->data);
+				: array_merge($data, $this->data, $this->viewCommonDataProviderContract->getCommonData());
+		
+		extract($this->escapeData());
 
 		if (isset($this->requiredObject) && ! is_null($this->requiredObject)) {
 			if ( ! $this->matchRequiredObject()) {
@@ -77,9 +81,20 @@ class ViewProvider implements ViewProviderContract
 	        	$rendered = ob_get_contents(); 
 			ob_end_clean();
 			//
+		} else {
+			throw new \Exception("View {$this->view} does not exist.");
 		}
 
 		return $rendered;
+	}
+	
+	private function escapeData()
+	{
+		if ($this->escapeHtmlChars) {
+			Util::e($this->data);
+		}
+		
+		return $this->data;
 	}
 
 	private function matchRequiredObject()
@@ -145,9 +160,7 @@ class ViewProvider implements ViewProviderContract
 	public function __get($property) 
 	{
 		if (array_key_exists($property, $this->data)) {
-			return $this->escapeHtmlChars 
-				? Util::e($this->data[$property])
-					: $this->data[$property];
+			return $this->data[$property];
 		}
 
 		// TODO: remove me!		

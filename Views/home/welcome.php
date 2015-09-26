@@ -27,7 +27,13 @@
 	
 	<div class="container">
 		<h1>
-			<?= $this->welcome; ?>
+			<?php if (isset($users)) : ?>
+				<?php foreach ($users as $u) : ?>
+					<?php echo $u->username; ?>
+				<?php endforeach;?>
+			<?php endif;?>
+			
+			<?= $welcome; ?>
 		</h1>
 
 		<h4><?= $this->slogan; ?></h4>
