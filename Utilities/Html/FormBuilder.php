@@ -29,7 +29,7 @@ class FormBuilder implements FormBuilderContract
 
 		if (is_null($method)) {
 			$method = 'POST';
-		} elseif ($method != 'POST') {
+		} elseif ($method != 'GET') {
 			$form .= static::generateHttpMethodSignature($method);
 		}
 
