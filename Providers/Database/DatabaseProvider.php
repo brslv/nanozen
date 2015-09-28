@@ -85,5 +85,14 @@ class DatabaseProvider implements DatabaseProviderContract
 		
 		return $this->query->fetch($fetchStyle);
 	}
+
+	/**
+	 * Returns the last inserted id in the database.
+	 * @return int
+	 */
+	public function lastInsertId()
+	{
+		return $this->handler->lastInsertId();	
+	}
 	
 }
