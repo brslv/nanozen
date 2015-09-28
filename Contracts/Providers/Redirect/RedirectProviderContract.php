@@ -11,6 +11,6 @@ namespace Nanozen\Contracts\Providers\Redirect;
 interface RedirectProviderContract 
 {
 	
-	function static to($location);
+	static function to($location);
 
 }
