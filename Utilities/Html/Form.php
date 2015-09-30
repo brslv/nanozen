@@ -63,7 +63,7 @@ class Form
 		return InputBuilder::build('password', $name, null, $attributes);
 	}
 
-	public static function dropdown($name, array $options, array $attributes = null)
+	public static function dropdown($name, array $options, array $attributes = null, $selected = null)
 	{
 		$dropdown = sprintf('<select name="' . $name . '" ');
 
@@ -76,7 +76,13 @@ class Form
 		}
 
 		foreach ($options as $optionValue => $optionText) {
-			$dropdown .= sprintf('<option value="%s"> %s ', $optionValue, $optionText);
+            $option = sprintf('<option value="%s"> %s ', $optionValue, $optionText);
+            
+            if ( ! is_null($selected) && trim($selected) != "" && $optionValue == $selected) {
+                $option = sprintf('<option value="%s" selected="selected"> %s ', $optionValue, $optionText);
+            }
+            
+			$dropdown .= $option;
 		}
 
 		$dropdown .= "</select>";
