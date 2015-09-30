@@ -110,4 +110,26 @@ class Form
 		return '</form>';
 	}
 
+	public static function ajaxScript($button, $url, $method, $loadOn, $params = []) 
+    {
+        $ajax = '<script>';
+        $ajax .= '$("' . $button . '").click(function (e) {'
+                . 'e.preventDefault();';
+        $ajax .= '$.ajax({';
+        $ajax .= 'url: "' . $url . '",';
+        $ajax .= 'method: "' . $method . '",';
+        $ajax .= 'data: {';
+        
+        foreach ($params as $d) {
+            $ajax .= substr($d, 1) . ': $("' . $d . '").val(),';
+        }
+        
+        $ajax .= '}';
+        $ajax .= '}).done(function (data) {';
+        $ajax .= '$("' . $loadOn . '").text(data);';
+        $ajax .= '})});</script>';
+        
+        return $ajax;
+    }
+
 }
